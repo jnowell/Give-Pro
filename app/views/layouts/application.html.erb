@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DonationTracker</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+
+</head>
+<body>
+
+	<div class="header">
+      <div class="container">
+        <%= link_to root_path do %>
+          <img src="/assets/jeb2016.jpg" />
+        <% end %>
+
+        <div class="nav pull-right">
+        	<% if current_user %> 
+			  <ul> 
+			    <li><%= current_user.email %></li> 
+			    <li><%= link_to "Log out", logout_path, method: "delete" %></li> 
+			  </ul> 
+			<% else %> 
+			  <ul> 
+			    <li><%= link_to "Login", '/login' %></a></li> 
+			    <li><%= link_to "Signup", '/signup' %></a></li> 
+			  </ul> 
+			<% end %>
+		          
+		          
+		</div>
+	  </div>
+	</div>
+
+
+	<%= yield %>
+
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-76147314-1', 'auto');
+	  ga('send', 'pageview');
+
+  	</script>
+
+
+</body>
+</html>

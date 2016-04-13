@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @processor.name %>
+</p>
+
+<p>
+  <strong>Domain:</strong>
+  <%= @processor.domain %>
+</p>
+
+<p>
+  <strong>Regex:</strong>
+  <%= @processor.regex %>
+</p>
+
+<%= link_to 'Edit', edit_processor_path(@processor) %> |
+<%= link_to 'Back', processors_path %>
