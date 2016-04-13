@@ -1,0 +1,38 @@
+<%= form_for(@donation) do |f| %>
+  <% if @donation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@donation.errors.count, "error") %> prohibited this donation from being saved:</h2>
+
+      <ul>
+      <% @donation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= hidden_field_tag(:non_profit_id) %>
+
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.text_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :NonProfit_id %><br>
+    <%= f.autocomplete_field :NonProfit_id, autocomplete_non_profit_alias_donations_path, :id_element => '#non_profit_id' %>
+  </div>
+  <div class="field">
+    <%= f.label :donation_date %><br>
+    <%= f.date_select :donation_date %>
+  </div>
+  <div class="field">
+    <%= f.check_box :recurring %>
+    <%= f.label :recurring, "This is a recurring donation" %>
+  </div>
+  <div class="field">
+    <%= f.check_box :matching  %>
+    <%= f.label :matching, "This donation is being matched" %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Save", class: "btn-submit" %>
+  </div>
+<% end %>

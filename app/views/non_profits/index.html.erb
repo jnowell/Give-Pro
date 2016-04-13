@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Non Profit Directory</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ein</th>
+      <th>Name</th>
+      <th>Alias</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>ZIP Code</th>
+      <th>Subsection</th>
+      <th>Classification</th>
+      <th>Ruling Date</th>
+      <th>Exempt Code</th>
+      <th>Foundation Code</th>
+      <th>Domain name</th>
+      <th>Donation Page URL</th>
+      <th>Image URL</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @non_profits.each do |non_profit| %>
+      <tr>
+        <td><%= non_profit.ein %></td>
+        <td><%= non_profit.name %></td>
+        <td><%= non_profit.alias %></td>
+        <td><%= non_profit.address %></td>
+        <td><%= non_profit.city %></td>
+        <td><%= non_profit.state %></td>
+        <td><%= non_profit.zip %></td>
+        <td><%= non_profit.subsection %></td>
+        <td><%= non_profit.classification %></td>
+        <td><%= non_profit.ruling_date %></td>
+        <td><%= non_profit.exemption_code %></td>
+        <td><%= non_profit.foundation_code %></td>
+        <td><%= non_profit.domain_name %></td>
+        <td><%= non_profit.donation_page_url %></td>
+        <td><%= non_profit.image_url %></td>
+        <td><%= link_to 'Show', non_profit %></td>
+        <td><%= link_to 'Edit', edit_non_profit_path(non_profit) %></td>
+        <td><%= link_to 'Destroy', non_profit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Non profit', new_non_profit_path %>

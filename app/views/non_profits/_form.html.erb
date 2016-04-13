@@ -1,0 +1,77 @@
+<%= form_for(@non_profit) do |f| %>
+  <% if @non_profit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@non_profit.errors.count, "error") %> prohibited this non_profit from being saved:</h2>
+
+      <ul>
+      <% @non_profit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :ein %><br>
+    <%= f.number_field :ein %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :alias %><br>
+    <%= f.text_field :alias %>
+  </div>
+  <div class="field">
+    <%= f.label :address %><br>
+    <%= f.text_field :address %>
+  </div>
+  <div class="field">
+    <%= f.label :city %><br>
+    <%= f.text_field :city %>
+  </div>
+  <div class="field">
+    <%= f.label :state %><br>
+    <%= f.text_field :state %>
+  </div>
+  <div class="field">
+    <%= f.label :zip %><br>
+    <%= f.text_field :zip %>
+  </div>
+  <div class="field">
+    <%= f.label :exemption_code %><br>
+    <%= f.text_field :exemption_code %>
+  </div>
+  <div class="field">
+    <%= f.label :domain_name %><br>
+    <%= f.text_field :domain_name %>
+  </div>
+  <div class="field">
+    <%= f.label :ruling_date %><br>
+    <%= f.text_field :ruling_date %>
+  </div>
+  <div class="field">
+    <%= f.label :subsection %><br>
+    <%= f.text_field :subsection %>
+  </div>
+  <div class="field">
+    <%= f.label :classification %><br>
+    <%= f.text_field :classification %>
+  </div>
+  <div class="field">
+    <%= f.label :foundation_code %><br>
+    <%= f.text_field :foundation_code %>
+  </div>
+  <div class="field">
+    <%= f.label :donation_page_url %><br>
+    <%= f.text_field :donation_page_url %>
+  </div>
+  <div class="field">
+    <%= f.label :image_url %><br>
+    <%= f.text_field :image_url %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

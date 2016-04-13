@@ -1,0 +1,31 @@
+class SessionsController < ApplicationController
+	before_action :set_session
+
+	def new
+		puts "Session"
+	end
+
+	def create
+	  user = User.find_by_email(params[:session][:email])
+	  if user && user.authenticate(params[:session][:password])
+	    session[:user_id] = user.id
+	    redirect_to '/'
+	  else
+	    redirect_to '/login'
+	  end 
+	end
+
+	def destroy 
+	  session[:user_id] = nil 
+	  redirect_to '/' 
+	end
+
+	private
+	    # Use callbacks to share common setup or constraints between actions.
+	    def set_session
+	      #no idea why I need this, but login form seems to break otherwise
+	      session[:email] = session[:email]
+	      session[:password] = session[:password]
+	    end
+
+end
