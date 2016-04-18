@@ -36,6 +36,9 @@ elsif org_domain =='paypal.com'
 	org_name_match = stripped_content.scan(/Subject: Receipt for your donation to (.+)/)
 	#org_name = org_name_match
 	puts 'ORG NAME OF '+ org_name_match[0][0].to_s
+elsif org_domain =='actblue.com'
+	org_name_match = stripped_content.scan(/my campaign for the (\w+)\./)
+	puts 'ORG NAME OF '+ org_name_match[0][0].to_s
 end
 
 if org_name_match
