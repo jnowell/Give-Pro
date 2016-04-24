@@ -17,9 +17,9 @@ CSV.foreach(filename) do |row|
 		next
 	end
 	ein = row[0]
-	name = row[1].capitalize
-	address = row[3].capitalize
-	city = row[4].capitalize
+	name = row[1].titleize
+	address = row[3].titleize
+	city = row[4].titleize
 	state = row[5]
 	zip = row[6]
 	subsection = row[8]
