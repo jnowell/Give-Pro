@@ -1,3 +1,11 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+p.message {
+	font-size: 1.2em;
+    font-weight: normal;
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid;
+}

@@ -1,0 +1,19 @@
+
+<div class="preview">
+  <div class="container">
+    <div class="show">
+    	<p class="message">
+    		Your account currently doesn't have any donations linked to it. Please see below for what a sample dashboard will look like once you begin adding donations. To add donations, either email donation receipts from your email to receipts@givepro.io or enter them manually via our <%= link_to 'Donation Form', :controller => "donations", :action => "new" %>.
+    	</p>
+
+    	<%= render "shared/dashboard", preview: true %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  window.sub_json = <%= raw @sub_hash.to_json %>;
+  window.time_json = <%= raw @date_total.to_json %>;
+<% end %>
+
+<%= javascript_include_tag "visualizations", "d3.v3.min" %>
