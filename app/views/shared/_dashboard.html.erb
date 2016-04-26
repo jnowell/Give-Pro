@@ -1,0 +1,62 @@
+<h1 class="page-header">Overview</h1>
+
+  <div class="row placeholders">
+      <div class="col-xs-6 col-sm-4 placeholder">
+        <div class="total">
+          <h3>Amount Given In <%= Time.now.year %></h3>
+          <span class="value"><%= number_to_currency(@annual_sum) %></span>
+        </div>
+        <div class="total">
+            <h3>Amount Tax-Exempt:</h3>
+            <span class="value"><%= number_to_currency(@exempt_sum) %></span>
+        </div>
+        <div class="total">
+            <h3>Total Amount Given:</h3>
+            <span class="value"><%= number_to_currency(@total_sum) %></span>
+        </div>
+      </div>
+      <div class="col-xs-6 col-sm-4 placeholder">
+          <div id="pie_chart"></div>
+          <h4>Organization Type</h4>
+          <span class="text-muted">Broken Down By Subsection</span>
+      </div>
+      <div class="col-xs-6 col-sm-4 placeholder">
+          <svg id="line_chart" width="300" height="200"></svg>
+          <h4>Giving Over Time</h4>
+          <span>Broken Down By Month</span>
+      </div>
+  </div>
+
+  <h1 class="page-header">Donation History</h1>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th>Donation date</th>
+        <th>Recurring</th>
+        <th>Matching</th>
+        <th>User</th>
+        <th>Nonprofit</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @donations.each do |donation| %>
+        <tr>
+          <td><%= number_to_currency(donation.amount) %></td>
+          <td><%= donation.donation_date %></td>
+          <td><%= donation.recurring %></td>
+          <td><%= donation.matching %></td>
+          <td><%= donation.User.email %></td>
+          <td><%= donation.NonProfit.name %></td>
+          <% unless preview == true %>
+          <td><%= link_to 'View', donation %></td>
+          <td><%= link_to 'Edit', edit_donation_path(donation) %></td>
+          <td><%= link_to 'Delete', donation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>

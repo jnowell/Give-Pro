@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :processors
-  resources :users
+  resources :users do
+    get 'preview'
+  end
   resources :non_profits
   resources :donations do
     get :autocomplete_non_profit_alias, :on => :collection

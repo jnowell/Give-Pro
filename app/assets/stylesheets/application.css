@@ -81,6 +81,64 @@
   text-align: left;
 }
 
+/*
+ * Line chart
+ */
+
+ #line_chart path { 
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.placeholders h4 {
+  margin-bottom: 0;
+}
+
+.placeholder {
+  padding: 0 12px;
+  margin-bottom: 20px;
+}
+
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+svg.legend {
+  padding-left: 10px;
+}
+
+g.slice text {
+  font-size: 1.5em;
+}
+
+
+.total .value {
+  font-size: 2.5em;
+}
+
+.total {
+  padding-bottom:10px;
+}
+
 input[type=text],
 input[type=email],
 input[type=password] {
