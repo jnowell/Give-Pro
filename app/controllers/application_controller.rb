@@ -20,14 +20,17 @@ class ApplicationController < ActionController::Base
     @exempt_sum = 0
     sub_count = Hash.new
     @date_total = Hash.new
-    min_month = [@donations.last.donation_date.at_beginning_of_month,Date.today.at_beginning_of_month.prev_year].min
-    cur_month = Date.today.at_beginning_of_month
 
-    #populate month graph before beginning...necessary because hash iterates by order of insertion
-    while min_month <= cur_month do
-      month_in_ms = min_month.strftime('%Q')
-      @date_total[month_in_ms] = 0
-      min_month = min_month.next_month
+    unless @donations.empty?
+      min_month = [@donations.last.donation_date.at_beginning_of_month,Date.today.at_beginning_of_month.prev_year].min
+      cur_month = Date.today.at_beginning_of_month
+      
+      #populate month graph before beginning...necessary because hash iterates by order of insertion
+      while min_month <= cur_month do
+        month_in_ms = min_month.strftime('%Q')
+        @date_total[month_in_ms] = 0
+        min_month = min_month.next_month
+      end
     end
 
 
