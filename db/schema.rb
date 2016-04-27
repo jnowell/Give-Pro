@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20160405011823) do
   create_table "non_profits", force: :cascade do |t|
     t.integer  "ein"
     t.string   "name"
-    t.string   "alias",             default: "ActiveRecord::Schema"
+    t.string   "alias"
     t.string   "address"
     t.string   "city"
     t.string   "state"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20160405011823) do
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
   end
+
+  add_index "non_profits", ["alias"], name: "index_non_profits_on_alias"
 
   create_table "processors", force: :cascade do |t|
     t.string   "name"
