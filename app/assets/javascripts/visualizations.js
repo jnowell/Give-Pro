@@ -134,7 +134,7 @@
 
       var legend = d3.select("#pie_chart").append("svg")
         .attr("class", "legend")
-        .attr("width", radius * 2)
+        .attr("width", radius * 1.5)
         .attr("height", radius)
         .selectAll("g")
         .data(data)

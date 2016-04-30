@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
     unless @donations.empty?
       min_month = [@donations.last.donation_date.at_beginning_of_month,Date.today.at_beginning_of_month.prev_year].min
       cur_month = Date.today.at_beginning_of_month
-      
+
       #populate month graph before beginning...necessary because hash iterates by order of insertion
       while min_month <= cur_month do
         month_in_ms = min_month.strftime('%Q')
@@ -62,11 +62,11 @@ class ApplicationController < ActionController::Base
     sub_labels = Hash.new
     sub_labels[1] = "Corporations"
     sub_labels[2] = "Title-Holding Corporations"
-    sub_labels[3] = "Charities & Religious Orgs"
+    sub_labels[3] = "Charity/Religious"
     sub_labels[4] = "Social Welfare"
     sub_labels[5] = "Labor & Agriculture"
     sub_labels[6] = "Business"
-    sub_labels[7] = "Social & Recreational"
+    sub_labels[7] = "Social/Recreational"
     sub_labels[8] = "Fraternal"
     sub_labels[9] = "Employee Beneficiaries"
     sub_labels[10] = "Domestic Fraternal"
