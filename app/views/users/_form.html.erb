@@ -1,8 +1,8 @@
-<%= form_for :user, url: '/users' do |f| %>
+<%= form_for(@user) do |f| %>
 
   Email: <%= f.text_field :email %>
   Password: <%= f.password_field :password %>
   Password Confirmation: <%= f.password_field :password_confirmation %>
-  <%= f.submit "Register", class: "btn-submit" %>
+  <%= f.submit submit_label, class: "btn-submit" %>
 
 <% end %>
