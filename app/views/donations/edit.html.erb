@@ -1,6 +1,9 @@
 <h1>Editing Donation</h1>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @donation %> |
-<%= link_to 'Back', donations_path %>
+<div class="donation">
+	<div class="container">
+		<div class="form">
+			<%= render 'form', submit_label: 'Update' %>
+		</div>
+	</div>
+</div>
