@@ -4,19 +4,20 @@ filename = ARGV[0].to_s
 
 org_count = 0
 saved_count = 0
-header = true
 
 CSV.foreach(filename) do |row|
-	#disregard header row
-	if header
-		header = false
+	#disregard header rows
+	ein = row[0]
+	if ein == 'EIN'
+		puts "disregarding header"
 		next
 	end
+
 	org_count += 1
 	if (org_count < 0)
 		next
 	end
-	ein = row[0]
+	
 	name = row[1].titleize
 	address = row[3].titleize
 	city = row[4].titleize
