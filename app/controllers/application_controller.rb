@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     @date_total = Hash.new
 
     unless @donations.empty?
-      min_month = [@donations.last.donation_date.at_beginning_of_month,Date.today.at_beginning_of_month.prev_year].min
+      min_month = [@donations.last.donation_date.at_beginning_of_month,Date.today.at_beginning_of_month.prev_year.next_month].min
       cur_month = Date.today.at_beginning_of_month
 
       #populate month graph before beginning...necessary because hash iterates by order of insertion
