@@ -7,3 +7,12 @@
 		</div>
 	</div>
 </div>
+
+<%= javascript_tag do %>
+    $(function () {
+        $('#donation_picker').datetimepicker({
+        	format: 'DD/MM/YYYY',
+        	maxDate: new Date()
+    	});
+    });
+<% end %>

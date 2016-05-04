@@ -16,3 +16,5 @@
 //= require_tree .
 //= require jquery-ui/autocomplete
 //= require autocomplete-rails
+//= require moment
+//= require bootstrap-datetimepicker
