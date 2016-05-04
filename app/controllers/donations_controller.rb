@@ -2,7 +2,7 @@ class DonationsController < ApplicationController
   before_action :require_user
   before_action :set_donation, only: [:show, :edit, :update, :destroy]
   autocomplete :non_profit, :alias
-
+  
 
   # GET /donations
   # GET /donations.json
@@ -28,7 +28,10 @@ class DonationsController < ApplicationController
   # POST /donations
   # POST /donations.json
   def create
-    non_profit = NonProfit.find(params[:non_profit_id])
+    puts "Non Profit ID of #{params[:non_profit_id]}"
+    if params[:non_profit_id].present?
+      non_profit = NonProfit.find(params[:non_profit_id])
+    end
     @donation = Donation.new(donation_params.merge(:User => @current_user, :NonProfit => non_profit))
 
     respond_to do |format|
@@ -74,6 +77,6 @@ class DonationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def donation_params
-      params.require(:donation).permit(:amount, :donation_date, :recurring, :matching, :User_id, :NonProfit_id)
+      params.require(:donation).permit(:amount, :donation_date, :recurring, :matching, :User_id, :non_profit_id)
     end
 end

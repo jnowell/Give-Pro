@@ -31,30 +31,33 @@ div {
 .field_with_errors {
   padding: 2px;
   background-color: red;
-  display: table;
 }
 
 #error_explanation {
-  width: 450px;
   border: 2px solid red;
   padding: 7px;
   padding-bottom: 0;
   margin-bottom: 20px;
   background-color: #f0f0f0;
 
+  ul {
+    padding-left: 20px;
+    padding-top: 8px;
+  }
+
   h2 {
-    text-align: left;
+    text-align: center;
     font-weight: bold;
     padding: 5px 5px 5px 15px;
-    font-size: 12px;
     margin: -7px;
     margin-bottom: 0px;
     background-color: #c00;
     color: #fff;
+    line-height:1.1em;
   }
 
   ul li {
-    font-size: 12px;
+    text-align: left;
     list-style: square;
   }
 }

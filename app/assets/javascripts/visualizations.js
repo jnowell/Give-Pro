@@ -14,13 +14,13 @@
       var lineData = [];
       var count = 0;
       var time = new Date();
-      console.log("time of "+window.time_json);
       for (var month in window.time_json) {
-      	console.log("Month of "+month+" and json month of "+window.time_json[month]);
-        var d = new Date(Number(month));
+      	var d = new Date(Number(month));
+        if(d.getTimezoneOffset() > 0){
+            d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+        }
         var m = d.getMonth();
         var y = d.getYear();
-        console.log("Date of "+d+"Month of "+m+" and year of "+y);
         var month_obj = { x: count, y: window.time_json[month], date: d }
         count++;
         lineData.push(month_obj);

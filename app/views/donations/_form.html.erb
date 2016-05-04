@@ -17,8 +17,17 @@
     <%= f.text_field :amount %>
   </div>
   <div class="field">
+  <% if @donation.errors.any? and @donation.errors[:NonProfit] %>
+    <div class="field_with_errors">
+      <%= f.label :NonProfit_id %><br>
+    </div>
+    <div class="field_with_errors">
+      <%= f.autocomplete_field :NonProfit_id, autocomplete_non_profit_alias_donations_path, :id_element => '#non_profit_id' %>
+    </div>
+  <% else %>
     <%= f.label :NonProfit_id %><br>
     <%= f.autocomplete_field :NonProfit_id, autocomplete_non_profit_alias_donations_path, :id_element => '#non_profit_id' %>
+  <% end %>
   </div>
   <div class="field">
     <%= f.label :donation_date %><br>
