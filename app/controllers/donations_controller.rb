@@ -18,7 +18,7 @@ class DonationsController < ApplicationController
 
   # GET /donations/new
   def new
-    @donation = Donation.new
+    @donation = Donation.new(:donation_date => Date.today)
   end
 
   # GET /donations/1/edit
@@ -28,7 +28,6 @@ class DonationsController < ApplicationController
   # POST /donations
   # POST /donations.json
   def create
-    puts "Non Profit ID of #{params[:non_profit_id]}"
     if params[:non_profit_id].present?
       non_profit = NonProfit.find(params[:non_profit_id])
     end

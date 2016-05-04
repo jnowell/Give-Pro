@@ -33,6 +33,9 @@ gem 'ruby-web-search'
 
 gem 'bcrypt'
 
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+
 gem 'plaid'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

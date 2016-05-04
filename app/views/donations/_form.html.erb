@@ -31,7 +31,14 @@
   </div>
   <div class="field">
     <%= f.label :donation_date %><br>
-    <%= f.date_select :donation_date %>
+    <div class="form-group">
+        <div class='input-group date' id='donation_picker'>
+            <%= f.text_field :donation_date, class: "form-control", :value => @donation.donation_date.strftime("%d/%m/%Y") %>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
   </div>
   <div class="field">
     <%= f.check_box :recurring %>
