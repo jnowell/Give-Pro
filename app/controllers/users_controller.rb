@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :save_income]
 
   # GET /users
   # GET /users.json
@@ -19,6 +19,24 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+  end
+
+  def save_income
+    @user.income = params[:user][:income]
+    @goal_percent = (params[:annual_sum].to_f*100/@user.donation_goal.to_f)
+    @saved_user = @user
+    income = params[:user][:income]
+    puts "Goal percentage of " + @goal_percent.to_s
+
+    respond_to do |format|
+      if @user.save
+        format.html { render partial: 'shared/_income', locals: { :income => income }  }
+        format.json { render partial: 'shared/_income'  }
+      else
+        format.html { render :income }
+        format.json { render :income }
+      end
+    end
   end
 
   # POST /users

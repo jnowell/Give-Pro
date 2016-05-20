@@ -1,5 +1,5 @@
 class DonationsController < ApplicationController
-  before_action :require_user
+  before_action :require_user, except: [:preview]
   before_action :set_donation, only: [:show, :edit, :update, :destroy]
   autocomplete :non_profit, :alias
   
@@ -9,6 +9,9 @@ class DonationsController < ApplicationController
   def index
     #@donations = Donation.all
     create_dashboard(session[:user_id])
+    @user = @current_user
+    @saved_user = @user
+    @income = @user.income
   end
 
   # GET /donations/1
@@ -23,6 +26,14 @@ class DonationsController < ApplicationController
 
   # GET /donations/1/edit
   def edit
+  end
+
+  def preview
+    if session[:user_id]
+      redirect_to :action => 'index'
+    end
+    @user = User.find(1)
+    create_dashboard(1)
   end
 
   # POST /donations

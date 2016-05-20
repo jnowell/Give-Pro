@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405011823) do
+ActiveRecord::Schema.define(version: 20160513045615) do
 
   create_table "donations", force: :cascade do |t|
     t.float    "amount"
@@ -47,9 +47,8 @@ ActiveRecord::Schema.define(version: 20160405011823) do
     t.string   "image_url"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
+    t.string   "amount_regex"
   end
-
-  add_index "non_profits", ["alias"], name: "index_non_profits_on_alias"
 
   create_table "processors", force: :cascade do |t|
     t.string   "name"

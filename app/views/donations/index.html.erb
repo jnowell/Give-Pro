@@ -18,6 +18,7 @@
 <%= javascript_tag do %>
   window.sub_json = <%= raw @sub_hash.to_json %>;
   window.time_json = <%= raw @date_total.to_json %>;
+  $('.donation-meter .glass .amount').css('height','<%= number_to_percentage(@goal_percent) %>');
 <% end %>
 
 <%= javascript_include_tag "visualizations", "d3.v3.min" %>
