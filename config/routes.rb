@@ -1,17 +1,17 @@
 Rails.application.routes.draw do
   resources :processors
   resources :users do
-    get 'preview'
+    get 'preview', as: 'preview'
+    patch 'save_income'
   end
   resources :non_profits
   resources :donations do
     get :autocomplete_non_profit_alias, :on => :collection
   end
 
-  root :to => 'donations#index'
+  root :to => 'donations#preview'
 
   get 'signup'  => 'users#new' 
-  resources :users
 
   get 'login' => 'sessions#new', as: 'login'
   post 'login' => 'sessions#create'

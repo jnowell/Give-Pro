@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
 	    end
 	end
 
+	def donation_goal
+		return (self.income.to_f * 0.2)
+	end
+
 	has_secure_password
 
 	def self.authenticate(login_password="")

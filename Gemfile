@@ -20,6 +20,10 @@ gem 'coffee-rails', '~> 4.1.0'
 #gem 'google-api-client', '0.9'
 gem 'google-api-client', '<0.9'
 
+gem 'google-search'
+
+gem 'searchbing'
+
 gem 'omniauth', '~> 1.2.2'
 gem 'omniauth-google-oauth2'
 
@@ -35,6 +39,8 @@ gem 'bcrypt'
 
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+
+gem 'aws-ses'
 
 gem 'plaid'
 # Use jquery as the JavaScript library

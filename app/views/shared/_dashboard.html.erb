@@ -15,7 +15,10 @@
             <span class="value"><%= number_to_currency(@total_sum) %></span>
         </div>
       </div>
-      <div class="col-xs-6 col-sm-4 placeholder">
+      <div class="col xs-6 col-sm-4 placeholder">
+          <%= render 'shared/_income' %>
+      </div>
+      <div class="col-xs-6 col-sm-4 placeholder" style="display:none">
           <div id="pie_chart"></div>
           <h4>Organization Type</h4>
           <span class="text-muted">Broken Down By Subsection</span>

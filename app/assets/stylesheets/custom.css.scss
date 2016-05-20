@@ -69,6 +69,110 @@ p {
   text-decoration: none;
 }
 
+/*
+ * Thermometer
+ */
+
+ .donation-meter {
+  width: 30%;
+  float: left;
+  margin: 30px 0 0 30px;
+
+  .glass {
+    background: #e5e5e5;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    height: 150px;
+    margin: 0 30px 10px;
+    position: relative;
+    width: 30px;
+  }
+  .amount {
+    background: #008000;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    width: 30px;
+    position: absolute;
+     bottom: 5px;
+  }
+  strong { display: block; text-align: center; }
+  .goal {
+    font-size: 30px;
+  }
+  .total {
+    font-size: 16px;
+    position: absolute;
+    right: 35px;
+  }
+}
+
+.bulb {
+  background: #e5e5e5;
+  border-radius: 100px;
+  display: block;
+  height: 50px;
+  margin: 0 35px 10px;
+  position: relative;
+    top: -20px;
+    right: 15px;
+  width: 50px;
+  .red-circle {
+    background: #008000;
+    border-radius: 100px;
+    display: block;
+    height: 50px;
+    width: 50px;
+  }
+  .filler {
+    background: #008000;
+    border-radius: 100px 100px 0 0;
+    display: none;
+    height: 50px;
+    width: 50px;
+    position: relative;
+      top: -65px;
+      right: -15px;
+    z-index: 30;
+  }
+}
+
+
+.donation-meter-callout {
+  width: 60%;
+  float: right;
+  margin:30px 5px 0 0;
+}
+
+.donation-meter-callout span {
+  display: block;
+}
+
+.edit_user {
+  padding-top: 20px;
+}
+
+.edit_user span.dollar {
+    font-size: 20px;
+    display: inline;
+    padding-right: 5px;
+}
+
+.edit_user input[type=text] {
+  width: 60%;
+}
+
+.donation-meter-callout span.goal {
+  font-size:1.2em;
+}
+
+.donation-meter-callout span.goal_value {
+  font-size:1.3em;
+}
+
+.donation-meter-callout span.goal_progress {
+  padding-top:15px;
+}
+
 /* footer */
 
 footer {
@@ -99,3 +203,4 @@ footer ul li {
   float: left;
   margin-left: 15px;
 }
+
