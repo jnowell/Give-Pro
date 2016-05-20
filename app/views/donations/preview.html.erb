@@ -1,0 +1,18 @@
+<div class="preview">
+  <div class="container">
+    <div class="show">
+    	<p class="message">
+    		Welcome to GivePro! GivePro is the best way to track your non-profit giving. Please see a sample dashboard below, and then <%= link_to 'Register Now', :controller => "users", :action => "new" %> to get started.
+    	</p>
+
+    	<%= render "shared/dashboard", preview: true %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  window.sub_json = <%= raw @sub_hash.to_json %>;
+  window.time_json = <%= raw @date_total.to_json %>;
+<% end %>
+
+<%= javascript_include_tag "visualizations", "d3.v3.min" %>
