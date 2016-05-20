@@ -1,0 +1,38 @@
+<%-# there has to be a better way to do this, right? -%>
+<% if @user.income.presence %>
+	<div class="donation-thermometer">
+<% else %>
+	<div class="donation-thermometer" style="display:none">
+<% end %>
+		<div class="donation-meter">
+		  <span class="glass">
+		      <span class="amount"></span>
+		  </span>
+		  <div class="bulb">
+		      <span class="red-circle"></span>
+		      <span class="filler">
+		          <span></span>
+		      </span>
+		  </div>
+		</div>
+		<div class="donation-meter-callout">
+			<div class="total">
+				<h3><%= Time.now.year %> Donation Goal</h3>
+				<span class="value"><%= number_to_currency(@user.donation_goal) %></span>
+		  	</div>
+		  	<div class="total">
+		  		<h3>% Progress</h3>
+		  		<span id="span_goal_percent" class="value"><%= number_to_percentage(@goal_percent,precision: 0) %></span>
+		  	</div>
+		</div>
+	</div>
+<% unless @user.income.presence %>
+	<%= form_for @user, url: user_save_income_path(@user), remote: true do |f| %>
+	  <%= hidden_field_tag("id",@user.id) %>
+	  <%= hidden_field_tag("annual_sum",@annual_sum) %>
+	  <%= f.label :income, "What Is Your Annual Income?" %><br>
+	  <span class="dollar">$</span><%= f.text_field :income %>
+	  <%= f.submit 'Calculate Donation Goal', class: "btn-primary" %>
+	<% end %>
+<% end %>
+	<div id="income-modal" class="modal fade"></div>
