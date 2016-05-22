@@ -6,6 +6,12 @@
 
       <p id="notice"><%= notice %></p>
 
+      <% if @donations.empty? %>
+        <p class="message">
+          You currently don't have any donations. To get started adding donations, either forward donation email receipts to <a href="mailto:charityemailtest@gmail.com">charityemailtest@gmail.com</a> or add them manually via our <%= link_to 'Add Donation Form', :controller => "donations", :action => "new" %>.
+        </p>
+      <% end %>
+
       <%= render "shared/dashboard", preview: false %>
 
       <br>

@@ -33,7 +33,9 @@ class DonationsController < ApplicationController
       redirect_to :action => 'index'
     end
     @user = User.find(1)
-    create_dashboard(1)
+    if @user
+      create_dashboard(1)
+    end
   end
 
   # POST /donations
@@ -46,7 +48,7 @@ class DonationsController < ApplicationController
 
     respond_to do |format|
       if @donation.save
-        format.html { redirect_to @donation, notice: 'Donation was successfully created.' }
+        format.html { redirect_to :index, notice: 'Donation was successfully created.' }
         format.json { render :show, status: :created, location: @donation }
       else
         format.html { render :new }
@@ -60,7 +62,7 @@ class DonationsController < ApplicationController
   def update
     respond_to do |format|
       if @donation.update(donation_params)
-        format.html { redirect_to @donation, notice: 'Donation was successfully updated.' }
+        format.html { redirect_to donations_url, notice: 'Donation was successfully updated.' }
         format.json { render :show, status: :ok, location: @donation }
       else
         format.html { render :edit }
