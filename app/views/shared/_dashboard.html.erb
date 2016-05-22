@@ -23,7 +23,11 @@
           <h4>Organization Type</h4>
           <span class="text-muted">Broken Down By Subsection</span>
       </div>
-      <div class="col-xs-6 col-sm-4 placeholder">
+      <% if @total_sum > 0 %>
+        <div class="col-xs-6 col-sm-4 placeholder">
+      <% else %>
+        <div class="col-xs-6 col-sm-4 placeholder" style="display:none">
+      <% end %>
           <svg id="line_chart"></svg>
           <h4>Giving Over Time</h4>
           <span class="text-muted">Broken Down By Month</span>

@@ -47,16 +47,14 @@ class ImageScraper
 
 		puts "Org domain of #{org_domain} and org name of #{org_name}"
 
-		if defined?(org_name)
+		if org_name
 			org = ::NonProfit.find_by(name: org_name)
-		elsif defined? org_domain
+		elsif !org_domain.empty?
 			org = ::NonProfit.find_by(domain_name: org_domain)
 		else
 			puts "No org found"
 			exit(false)
 		end 
-
-		puts "Org #{org.name}"
 
 		if stripped_content.match(/To: \S* <.*>/)
 			puts "Scanning 1"
@@ -173,10 +171,11 @@ class ImageScraper
 	end
 
 	def self.send_no_amount_email(email_content,org)
+		#puts "AWS KEY id of "+.to_s
 		intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex and then edit the Regex field in <a href=\"http://www.givepro.io/non_profits/#{org.id}/edit\">this form</a> and click 'Submit'."
 		ses = AWS::SES::Base.new(
-	  		:access_key_id => 'AKIAIR4XE2SLCCOOH4DA',
-	  		:secret_access_key => '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')
+	  		:access_key_id => ENV["AWS_KEY_ID"],
+	  		:secret_access_key => ENV["AWS_SECRET_KEY"])
 
 		print ses.addresses.list.result
 		
