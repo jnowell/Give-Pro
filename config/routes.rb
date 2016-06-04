@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
   resources :non_profits
   resources :donations do
+    get :read_receipt, :on => :collection
     get :autocomplete_non_profit_alias, :on => :collection
   end
 

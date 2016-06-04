@@ -1,5 +1,5 @@
 class DonationsController < ApplicationController
-  before_action :require_user, except: [:preview]
+  before_action :require_user, except: [:preview, :read_receipt]
   before_action :set_donation, only: [:show, :edit, :update, :destroy]
   autocomplete :non_profit, :alias
   
@@ -48,7 +48,7 @@ class DonationsController < ApplicationController
 
     respond_to do |format|
       if @donation.save
-        format.html { redirect_to :index, notice: 'Donation was successfully created.' }
+        format.html { redirect_to donation_url, notice: 'Donation was successfully created.' }
         format.json { render :show, status: :created, location: @donation }
       else
         format.html { render :new }
@@ -69,6 +69,25 @@ class DonationsController < ApplicationController
         format.json { render json: @donation.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def read_receipt
+    if params[:token] && (params[:token] == 'test_token')
+      puts "READ RECEIPT CALLED WITH MESSAGE OF" +params[:message_id].to_s
+      Aws.config.update({
+        region: 'us-east-1',
+        credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_KEY"])
+      })
+      s3 = Aws::S3::Client.new(region: 'us-east-1')
+      resp = s3.get_object({bucket: 'donations-bucket', key: params[:message_id]})
+      contents = resp.body.read
+
+      from = contents.match(/(?<=From: )(.*?)(?=\n)/).try(:to_s)
+      to = contents.match(/(?<=To: )(.*?)(?=\n)/).try(:to_s)
+      subject = contents.match(/(?<=Subject: )(.*?)(?=\n)/).try(:to_s)
+      body = contents.match(/(?<=Content-Type: text\/html; charset\=UTF-8)(.*?)(?=--)/m).try(:to_s)
+      puts "Body of #{body}"
+      #render text: 'email created', status: :created 
   end
 
   # DELETE /donations/1
