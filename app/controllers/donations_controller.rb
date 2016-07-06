@@ -88,6 +88,7 @@ class DonationsController < ApplicationController
       body = contents.match(/(?<=Content-Type: text\/html; charset\=UTF-8)(.*?)(?=--)/m).try(:to_s)
       puts "Body of #{body}"
       #render text: 'email created', status: :created 
+    end
   end
 
   # DELETE /donations/1
