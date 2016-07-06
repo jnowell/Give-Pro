@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
   end
 
   def create_dashboard(user_id)
-    user = User.find(user_id)
-    @donations = Donation.where("user_id = ?", user.id).order(donation_date: :desc)
+    @dashboard_user = User.find(user_id)
+    @donations = Donation.where("user_id = ?", user_id).order(donation_date: :desc)
     @total_sum = 0
     @annual_sum = 0
     @exempt_sum = 0
@@ -93,7 +93,7 @@ class ApplicationController < ActionController::Base
     sub_count.each do |key,value|
       @sub_hash[sub_labels[key]] = value
     end
-    create_thermometer(@annual_sum,user)
+    create_thermometer(@annual_sum,@dashboard_user)
   end
 
   def create_thermometer(annual_sum,user)

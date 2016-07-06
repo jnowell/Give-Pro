@@ -79,4 +79,6 @@ Rails.application.configure do
 
   # Load secret key from environment variable
   config.secret_key_base = ENV["SECRET_KEY_BASE"]
+
+  config.action_mailer.delivery_method = :ses
 end

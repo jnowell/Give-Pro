@@ -3,9 +3,12 @@ require 'date'
 require 'curb'
 require 'uri/http'
 require 'searchbing'
+require 'aws-sdk'
 
 class ImageScraper
 	def self.parse_email(filename)
+		send_no_amount_email("Blah",nil)
+		exit(false)
 		filename = filename.to_s
 		puts 'File of '+filename
 		file = File.open(filename, "rb")
@@ -172,19 +175,21 @@ class ImageScraper
 
 	def self.send_no_amount_email(email_content,org)
 		#puts "AWS KEY id of "+.to_s
-		intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex and then edit the Regex field in <a href=\"http://www.givepro.io/non_profits/#{org.id}/edit\">this form</a> and click 'Submit'."
+		#intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex and then edit the Regex field in <a href=\"http://www.givepro.io/non_profits/#{org.id}/edit\">this form</a> and click 'Submit'."
 		ses = AWS::SES::Base.new(
-	  		:access_key_id => ENV["AWS_KEY_ID"],
+	  		:access_key_id => ENV["AWS_ACCESS_KEY_ID"],
 	  		:secret_access_key => ENV["AWS_SECRET_KEY"])
 
-		print ses.addresses.list.result
+		print ses.buckets
 		
-		ses.send_email(
-	            :to        => ['jrnowell@gmail.com'],
-	            :source    => '"GivePro" <charityemailtest@gmail.com>',
-	            :subject   => 'Script Error: Unable to Determine Amount',
-	            :html_body => intro_text + "<br/>"+CGI.unescape_html(email_content)
-		)
+		
+		#ses.send_email(
+	    #        :to        => ['jrnowell@gmail.com'],
+	    #        :source    => '"GivePro" < >',
+	    #        :subject   => 'Script Error: Unable to Determine Amount',
+	    #        :html_body => intro_text + "<br/>"+CGI.unescape_html(email_content)
+		#)
+		
 	end
 end
 

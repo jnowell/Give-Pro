@@ -1,5 +1,5 @@
 <%-# there has to be a better way to do this, right? -%>
-<% if @user.income.presence %>
+<% if @dashboard_user.income.presence %>
 	<div class="donation-thermometer">
 <% else %>
 	<div class="donation-thermometer" style="display:none">
@@ -18,7 +18,7 @@
 		<div class="donation-meter-callout">
 			<div class="total">
 				<h3><%= Time.now.year %> Donation Goal</h3>
-				<span class="value"><%= number_to_currency(@user.donation_goal) %></span>
+				<span class="value"><%= number_to_currency(@dashboard_user.donation_goal) %></span>
 		  	</div>
 		  	<div class="total">
 		  		<h3>% Progress</h3>
@@ -26,9 +26,9 @@
 		  	</div>
 		</div>
 	</div>
-<% unless @user.income.presence %>
-	<%= form_for @user, url: user_save_income_path(@user), remote: true do |f| %>
-	  <%= hidden_field_tag("id",@user.id) %>
+<% unless @dashboard_user.income.presence %>
+	<%= form_for @dashboard_user, url: user_save_income_path(@dashboard_user), remote: true do |f| %>
+	  <%= hidden_field_tag("id",@dashboard_user.id) %>
 	  <%= hidden_field_tag("annual_sum",@annual_sum) %>
 	  <%= f.label :income, "What Is Your Annual Income?" %><br>
 	  <span class="dollar">$</span><%= f.text_field :income %>

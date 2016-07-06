@@ -19,10 +19,13 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    if (@user.id != session[:user_id])
+      redirect_to '/'
+    end
   end
 
   def save_income
-    @user.income = params[:user][:income]
+    @dashboard_user.income = params[:user][:income]
     @goal_percent = (params[:annual_sum].to_f*100/@user.donation_goal.to_f)
     @saved_user = @user
     income = params[:user][:income]

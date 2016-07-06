@@ -22,6 +22,10 @@ class User < ActiveRecord::Base
 
 	has_secure_password
 
+	def generate_password_reset_token!
+  		update_attribute(:password_reset_token, SecureRandom.urlsafe_base64(48))
+	end
+
 	def self.authenticate(login_password="")
 	  if @user && @user.match_password(login_password)
 	    return user
