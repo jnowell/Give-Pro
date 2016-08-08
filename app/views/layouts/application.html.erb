@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DonationTracker</title>
+  <title>GivePro</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -23,8 +23,8 @@
 			  </ul> 
 			<% else %> 
 			  <ul> 
-			    <li><%= link_to "Login", '/login' %></a></li> 
-			    <li><%= link_to "Signup", '/signup' %></a></li> 
+			  	<li><%= link_to "Sign Up", '/signup' %></a></li> 
+			    <li><%= link_to "Log In", '/login' %></a></li>
 			  </ul> 
 			<% end %>
 		          
