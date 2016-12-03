@@ -2,18 +2,22 @@
 <html>
 <head>
   <title>GivePro</title>
+  <link href="https://fonts.googleapis.com/css?family=Acme" rel="stylesheet">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+
 
 </head>
 <body>
 
 	<div class="header">
       <div class="container">
-        <%= link_to root_path do %>
-          <%= image_tag "jeb2016.jpg" %>
-        <% end %>
+        <div class="logo">
+          <%= link_to root_path do %>
+            <span>GivePro</span>
+          <% end %>
+        </div>
 
         <div class="nav pull-right">
         	<% if current_user %> 

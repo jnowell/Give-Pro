@@ -81,6 +81,22 @@
   text-align: left;
 }
 
+.container .logo {
+  margin: 25px 0;
+  float: left;
+  width: 50%;
+}
+
+.container .logo span {
+  font-family: 'Acme', sans-serif;
+  font-size: 200%;
+  color: red;
+}
+
+.container .nav ul {
+  margin-bottom: 0px;
+}
+
 /*
  * Line chart
  */
