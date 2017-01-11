@@ -1,7 +1,7 @@
 <h1 class="page-header">Overview</h1>
 
   <div class="row placeholders">
-      <div class="col-xs-6 col-sm-4 placeholder">
+      <div class="col-xs-6 col-sm-4 placeholder topline">
         <div class="total">
           <h3>Amount Given In <%= Time.now.year %></h3>
           <span class="value"><%= number_to_currency(@annual_sum) %></span>
@@ -15,16 +15,16 @@
             <span class="value"><%= number_to_currency(@total_sum) %></span>
         </div>
       </div>
-      <div class="col xs-6 col-sm-4 placeholder">
+      <div class="col xs-6 col-sm-4 placeholder income">
           <%= render 'shared/_income' %>
       </div>
-      <div class="col-xs-6 col-sm-4 placeholder" style="display:none">
+      <div class="col-xs-6 col-sm-4 placeholder pie" style="display:none">
           <div id="pie_chart"></div>
           <h4>Organization Type</h4>
           <span class="text-muted">Broken Down By Subsection</span>
       </div>
       <% if @total_sum > 0 %>
-        <div class="col-xs-6 col-sm-4 placeholder">
+        <div class="col-xs-6 col-sm-4 placeholder time">
       <% else %>
         <div class="col-xs-6 col-sm-4 placeholder" style="display:none">
       <% end %>
@@ -39,29 +39,27 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Amount</th>
-        <th>Donation date</th>
-        <th>Recurring</th>
-        <th>Matching</th>
-        <th>User</th>
-        <th>Nonprofit</th>
-        <th colspan="3"></th>
+        <th class="amoun">Amount</th>
+        <th class="date">Donation date</th>
+        <th class="recur">Recurring</th>
+        <th class="match">Matching</th>
+        <th class="org">Nonprofit</th>
+        <th class="links" colspan="3"></th>
       </tr>
     </thead>
 
     <tbody>
       <% @donations.each do |donation| %>
         <tr>
-          <td><%= number_to_currency(donation.amount) %></td>
-          <td><%= donation.donation_date %></td>
-          <td><%= donation.recurring %></td>
-          <td><%= donation.matching %></td>
-          <td><%= donation.User.email %></td>
-          <td><%= donation.NonProfit.name %></td>
+          <td class="amount"><%= number_to_currency(donation.amount) %></td>
+          <td class="date"><%= donation.donation_date %></td>
+          <td class="recur"><%= donation.recurring ? "Yes" : "No" %></td>
+          <td class="match"><%= donation.matching ? "Yes" : "No" %></td>
+          <td class="org"><%= donation.NonProfit.name %></td>
           <% unless preview == true %>
-          <td><%= link_to 'View', donation %></td>
-          <td><%= link_to 'Edit', edit_donation_path(donation) %></td>
-          <td><%= link_to 'Delete', donation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td class="link"><%= link_to 'View', donation %></td>
+          <td class="link"><%= link_to 'Edit', edit_donation_path(donation) %></td>
+          <td class="link"><%= link_to 'Delete', donation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
           <% end %>
         </tr>
       <% end %>
