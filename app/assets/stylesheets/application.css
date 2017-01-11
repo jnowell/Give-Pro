@@ -42,7 +42,11 @@
 
 .header li {
  display: inline;
- margin-left: 30px;
+ margin-right: 30px;
+}
+
+.header li:last-child {
+  margin-right:0;
 }
 
 .header img {
@@ -70,7 +74,7 @@
 .pull-right {
   position: relative;
   margin: 25px 0;
-  width: 50%;
+  width: 70%;
 }
 
 .pull-right ul {
@@ -84,7 +88,7 @@
 .container .logo {
   margin: 25px 0;
   float: left;
-  width: 50%;
+  width: 30%;
 }
 
 .container .logo span {
@@ -185,6 +189,12 @@ a.btn {
   padding:0 100px;
 }
 
+@media screen and (max-width: 1024px) {
+  .row .pie,
+  .row .time {
+    display: none;
+  }
+
 @media screen and (max-width: 512px) {
   .pull-right {
     background-color: #f1f2f2;
@@ -212,5 +222,16 @@ a.btn {
   .pull-right ul li a {
     display: block;
     width: 100%;
+  }
+
+  .row .income,
+  .row .pie,
+  .row .time {
+    display: none;
+  }
+
+  .table .recur,
+  .table .match {
+    display: none;
   }
 }
