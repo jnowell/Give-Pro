@@ -1,5 +1,13 @@
+require 'google/apis/gmail_v1'
+require 'google/api_client/client_secrets'
+
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :save_income]
+  
+
+  CREDENTIALS_PATH = File.join(Dir.home, '.credentials',
+                             "gmail-ruby-quickstart.yaml")
+  WATCH_TOPIC_NAME = 'projects/optimum-battery-154220/topics/email_receipts'
 
   # GET /users
   # GET /users.json
@@ -22,6 +30,75 @@ class UsersController < ApplicationController
     if (@user.id != session[:user_id])
       redirect_to '/'
     end
+  end
+
+  ##
+  # Ensure valid credentials, either by restoring from the saved credentials
+  # files or intitiating an OAuth2 authorization. If authorization is required,
+  # the user's default browser will be launched to approve the request.
+  #
+  # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
+  def authorize
+    FileUtils.mkdir_p(File.dirname(CREDENTIALS_PATH))
+
+    client_secrets = Google::APIClient::ClientSecrets.load
+    auth_client = client_secrets.to_authorization
+    scopes = ['https://www.googleapis.com/auth/gmail.readonly']
+    auth_client.update!(
+      :scope => scopes,
+      :redirect_uri => 'http://localhost:3000/users/authorize'
+    )
+    if request['code'] == nil
+        auth_uri = auth_client.authorization_uri.to_s
+        redirect_to auth_uri
+    else
+      auth_client.code = request['code']
+      auth_client.fetch_access_token!
+      auth_client.client_secret = nil
+      session[:credentials] = auth_client.to_json
+      redirect_to :action => 'receive_oauth_code'
+      end
+  end
+
+  def receive_oauth_code
+    unless session.has_key?(:credentials)
+      redirect to('/oauth2callback')
+    end
+    puts session[:credentials].inspect
+    client_opts = JSON.parse(session[:credentials])
+    auth_client = Signet::OAuth2::Client.new(client_opts)
+
+    auth_client.update!(
+      :additional_parameters => {"access_type" => "offline"}
+    )
+
+
+    # Initialize the API
+    service = Google::Apis::GmailV1::GmailService.new
+    service.client_options.application_name = "GivePro" 
+    service.authorization = auth_client
+
+    # Show the user's labels
+    user_id = 'me'
+    result = service.list_user_messages(user_id, label_ids: ['INBOX'], q: "from:*.org")
+    
+    for message in result.messages
+      message_content = service.get_user_message(user_id,message.id)
+      for header in message_content.payload.headers
+        if header.name == "Subject"
+          #puts header.value
+        end
+      end
+    end
+
+    watch_request = Google::Apis::GmailV1::WatchRequest.new
+    watch_request.topic_name = WATCH_TOPIC_NAME
+    watch_request.label_ids = ['INBOX']
+
+    response = service.watch_user(user_id, watch_request)
+    puts response.inspect
+
+    redirect_to :action => 'preview'
   end
 
   def save_income
@@ -50,8 +127,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         session[:user_id] = @user.id
-        format.html { redirect_to "/users/#{@user.id}/preview", notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
+        if @user.email.end_with? "@gmail.com"
+          format.html { authorize }
+          format.json { authorize }
+        else
+          format.html { redirect_to "/users/preview", notice: 'User was successfully created.' }
+          format.json { render :show, status: :created, location: @user }
+        end
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }

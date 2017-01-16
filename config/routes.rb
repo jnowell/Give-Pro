@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
   resources :processors
   resources :users do
-    get 'preview', as: 'preview'
+    get :preview, :on => :collection
     patch 'save_income'
+    get :authorize, :on => :collection
+    get :receive_oauth_code, :on => :collection
   end
+
   resources :non_profits
   resources :donations do
     get :read_receipt, :on => :collection
