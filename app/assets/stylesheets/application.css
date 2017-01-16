@@ -194,6 +194,7 @@ a.btn {
   .row .time {
     display: none;
   }
+}
 
 @media screen and (max-width: 512px) {
   .pull-right {
