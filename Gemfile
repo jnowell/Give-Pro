@@ -16,9 +16,7 @@ gem 'coffee-rails', '~> 4.1.0'
 
 #gem 'omniauth-google-oauth2'
 #gem 'omniauth-google-oauth2'
-#gem 'google-api-client'
-#gem 'google-api-client', '0.9'
-gem 'google-api-client', '<0.9'
+gem 'google-api-client', '0.9'
 
 gem 'google-search'
 
@@ -26,6 +24,8 @@ gem 'searchbing'
 
 gem 'omniauth', '~> 1.2.2'
 gem 'omniauth-google-oauth2'
+
+gem 'seed_dump'
 
 gem 'jquery-ui-rails'
 gem 'rails-jquery-autocomplete'
