@@ -31,9 +31,12 @@ div {
   padding-top: 10px;
 }
 
-.field_with_errors {
-  padding: 2px;
-  background-color: red;
+.field_with_errors label {
+  color: red;
+}
+
+.field_with_errors input[type=text] {
+  border-color: red;
 }
 
 #error_explanation {
