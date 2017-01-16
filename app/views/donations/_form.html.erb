@@ -13,27 +13,27 @@
   <%= hidden_field_tag(:non_profit_id) %>
 
   <div class="field">
-    <%= f.label :amount %><br>
+    <%= f.label :amount %>
     <%= f.text_field :amount %>
   </div>
   <div class="field">
   <% if @donation.errors.any? and @donation.errors[:NonProfit] %>
     <div class="field_with_errors">
-      <%= f.label :NonProfit_id %><br>
+      <%= f.label :NonProfit_id %>
     </div>
     <div class="field_with_errors">
       <%= f.autocomplete_field :NonProfit_id, autocomplete_non_profit_alias_donations_path, :id_element => '#non_profit_id' %>
     </div>
   <% else %>
-    <%= f.label :NonProfit_id %><br>
+    <%= f.label :NonProfit_id %>
     <%= f.autocomplete_field :NonProfit_id, autocomplete_non_profit_alias_donations_path, :id_element => '#non_profit_id' %>
   <% end %>
   </div>
   <div class="field">
-    <%= f.label :donation_date %><br>
+    <%= f.label :donation_date %>
     <div class="form-group">
         <div class='input-group date' id='donation_picker'>
-            <%= f.text_field :donation_date, class: "form-control", :value => @donation.donation_date.strftime("%d/%m/%Y") %>
+            <%= f.text_field :donation_date, class: "form-control", :value => @donation.donation_date.try(:strftime, "%d/%m/%Y") %>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
