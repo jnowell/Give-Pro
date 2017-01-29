@@ -197,10 +197,25 @@ a.btn {
 }
 
 @media screen and (max-width: 512px) {
+  .header {
+    padding: 0;
+    width: 90%;
+  }
+
+  .container .logo {
+    width: 50%;
+  }
+
   .pull-right {
-    background-color: #f1f2f2;
-    position: relative;
     margin: 0;
+    width: 50%;
+  }
+
+  .show {
+    padding: 0 10px;
+  }
+
+  .col-xs-6.topline {
     width: 100%;
   }
 
@@ -214,10 +229,8 @@ a.btn {
   .pull-right ul li {
     display: block;
     float: left;
-    margin: 0;
     padding: 20px 0;
     text-align: center;
-    width: 50%;
   }
 
   .pull-right ul li a {
