@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     scopes = ['https://www.googleapis.com/auth/gmail.readonly']
     auth_client.update!(
       :scope => scopes,
-      :redirect_uri => 'http://localhost:3000/users/authorize'
+      :redirect_uri => 'http://'+request.host_with_port + '/users/authorize'
     )
     if request['code'] == nil
         auth_uri = auth_client.authorization_uri.to_s
