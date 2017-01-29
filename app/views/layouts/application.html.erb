@@ -7,6 +7,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%= favicon_link_tag 'favicon.ico' %>
 
 
 </head>
@@ -24,12 +25,12 @@
         	<% if current_user %> 
 			  <ul> 
 			    <li><%= current_user.email %></li> 
-			    <li class="last"><%= link_to "Log out", logout_path, method: "delete" %></li> 
+			    <li><%= link_to "Log out", logout_path, method: "delete" %></li> 
 			  </ul> 
 			<% else %> 
 			  <ul> 
 			  	<li><%= link_to "Sign Up", '/signup' %></a></li> 
-			    <li class="last"><%= link_to "Log In", '/login' %></a></li>
+			    <li><%= link_to "Log In", '/login' %></a></li>
 			  </ul> 
 			<% end %>
 		          
