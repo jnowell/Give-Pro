@@ -102,15 +102,14 @@ class UsersController < ApplicationController
   end
 
   def save_income
-    @dashboard_user.income = params[:user][:income]
+    @user.income = params[:user][:income]
     @goal_percent = (params[:annual_sum].to_f*100/@user.donation_goal.to_f)
-    @saved_user = @user
+    @dashboard_user = @user
     income = params[:user][:income]
-    puts "Goal percentage of " + @goal_percent.to_s
 
     respond_to do |format|
       if @user.save
-        format.html { render partial: 'shared/_income', locals: { :income => income }  }
+        format.html { render partial: 'shared/_income', locals: { :income => @user.income }  }
         format.json { render partial: 'shared/_income'  }
       else
         format.html { render :income }
