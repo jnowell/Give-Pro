@@ -40,16 +40,17 @@ class ApplicationController < ActionController::Base
 
       if donation.donation_date.year == cur_month.year
         @annual_sum += donation.amount
-        if donation.NonProfit.exemption_code > 0
+        if (donation.deductible)
           @exempt_sum += donation.amount
         end
       end
 
-
-      if sub_count[donation.NonProfit.subsection]
-        sub_count[donation.NonProfit.subsection] += donation.amount
-      else
-        sub_count[donation.NonProfit.subsection] = donation.amount
+      if donation.NonProfit.present?
+        if sub_count[donation.NonProfit.subsection]
+          sub_count[donation.NonProfit.subsection] += donation.amount
+        else
+          sub_count[donation.NonProfit.subsection] = donation.amount
+        end
       end
 
       month = donation.donation_date.at_beginning_of_month.strftime('%Q')

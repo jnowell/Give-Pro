@@ -160,6 +160,7 @@ g.slice text {
 }
 
 input[type=text],
+input[type=number],
 input[type=email],
 input[type=password] {
   color: #666666;

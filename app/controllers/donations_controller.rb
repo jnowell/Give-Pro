@@ -41,10 +41,12 @@ class DonationsController < ApplicationController
   # POST /donations
   # POST /donations.json
   def create
+    puts "Non Profit String of "+params[:donation][:NonProfit_id]
     if params[:non_profit_id].present?
       non_profit = NonProfit.find(params[:non_profit_id])
+      deductible = non_profit.tax_exempt
     end
-    @donation = Donation.new(donation_params.merge(:User => @current_user, :NonProfit => non_profit))
+    @donation = Donation.new(donation_params.merge(:User => @current_user, :NonProfit => non_profit, :deductible => deductible, :non_profit_string => params[:donation][:non_profit_string]))
 
     respond_to do |format|
       if @donation.save
@@ -60,8 +62,17 @@ class DonationsController < ApplicationController
   # PATCH/PUT /donations/1
   # PATCH/PUT /donations/1.json
   def update
+    puts "Non Profit String of "+params[:donation][:non_profit_string]
+    if params[:non_profit_id].present?
+      non_profit = NonProfit.find(params[:non_profit_id])
+      puts "Non Profit of #{non_profit.inspect}"
+      deductible = (non_profit.exemption_code > 0)
+    else 
+      non_profit = nil
+      deductible = false
+    end
     respond_to do |format|
-      if @donation.update(donation_params)
+      if @donation.update(donation_params.merge(:NonProfit => non_profit, :deductible => deductible, :non_profit_string => params[:donation][:non_profit_string]))
         format.html { redirect_to donations_url, notice: 'Donation was successfully updated.' }
         format.json { render :show, status: :ok, location: @donation }
       else
@@ -105,10 +116,13 @@ class DonationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_donation
       @donation = Donation.find(params[:id])
+      #this is to ensure that number shows up in currency form on edit form...
+      #has to be a less hacky way to do this in the view, and yet, here we are
+      @donation.amount = '%.2f' % @donation.amount
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def donation_params
-      params.require(:donation).permit(:amount, :donation_date, :recurring, :matching, :User_id, :non_profit_id)
+      params.require(:donation).permit(:amount, :donation_date, :recurring, :matching, :User_id, :non_profit_id, :NonProfit_id)
     end
 end

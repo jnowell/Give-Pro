@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160703235027) do
+ActiveRecord::Schema.define(version: 20170204190802) do
 
   create_table "donations", force: :cascade do |t|
     t.float    "amount"
@@ -21,8 +21,10 @@ ActiveRecord::Schema.define(version: 20160703235027) do
     t.integer  "User_id"
     t.integer  "NonProfit_id"
     t.integer  "Processor_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "non_profit_string"
+    t.boolean  "deductible"
   end
 
   add_index "donations", ["NonProfit_id"], name: "index_donations_on_NonProfit_id"
