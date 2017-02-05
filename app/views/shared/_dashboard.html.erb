@@ -53,7 +53,7 @@
           <td class="date"><%= donation.donation_date %></td>
           <td class="recur"><%= donation.recurring ? "Yes" : "No" %></td>
           <td class="match"><%= donation.matching ? "Yes" : "No" %></td>
-          <td class="org"><%= donation.NonProfit.name %></td>
+          <td class="org"><%= donation.non_profit_string %></td>
           <% unless preview == true %>
           <td class="link"><%= link_to 'View', donation %></td>
           <td class="link"><%= link_to 'Edit', edit_donation_path(donation) %></td>
