@@ -34,32 +34,26 @@
 
   <h1 class="page-header">Recent Giving</h1>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th class="amount">Amount</th>
-        <th class="date">Donation date</th>
-        <th class="recur">Recurring</th>
-        <th class="match">Matching</th>
-        <th class="org">Nonprofit</th>
-        <th class="links" colspan="3"></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @donations.each do |donation| %>
-        <tr>
-          <td class="amount"><%= number_to_currency(donation.amount) %></td>
-          <td class="date"><%= donation.donation_date %></td>
-          <td class="recur"><%= donation.recurring ? "Yes" : "No" %></td>
-          <td class="match"><%= donation.matching ? "Yes" : "No" %></td>
-          <td class="org"><%= donation.non_profit_string %></td>
-          <% unless preview == true %>
-          <td class="link"><%= link_to 'View', donation %></td>
-          <td class="link"><%= link_to 'Edit', edit_donation_path(donation) %></td>
-          <td class="link"><%= link_to 'Delete', donation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  <div class="card-deck clearfix">
+    <% @donations.each do |donation| %>
+      <div class="card" style="width:25rem;">
+        <% if donation.has_image %>
+          <%= image_tag("org_logos/"+donation.NonProfit.id.to_s+"."+donation.NonProfit.image_url, class: "card-img-top", alt: donation.NonProfit.alias) %>
+        <% end %>
+        <div class="card-block">
+          <% if donation.has_image %>
+            <h4 class="card-title">
+          <% else %>
+            <h4 class="card-title noimage">
           <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+            <%= donation.non_profit_string %>
+          </h4>
+          <div class="donation-data">
+            <p class="card-text amount"><%= number_to_currency(donation.amount) %></p>
+            <p class="card-text date"><%= donation.donation_date.strftime('%_m/%-d/%Y') %></p>
+            <%= link_to 'More Info', donation, class: 'card-link' %></td>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
