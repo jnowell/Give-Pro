@@ -4,7 +4,11 @@ class NonProfitsController < ApplicationController
   # GET /non_profits
   # GET /non_profits.json
   def index
-    @non_profits = NonProfit.all
+    if params[:name]
+      @non_profits = NonProfit.where("alias LIKE ?", "#{params[:name]}%")
+    else
+      @non_profits = NonProfit.all
+    end
   end
 
   # GET /non_profits/1
