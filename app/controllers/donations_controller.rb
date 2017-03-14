@@ -64,7 +64,6 @@ class DonationsController < ApplicationController
     puts "Non Profit String of "+params[:donation][:non_profit_string]
     if params[:non_profit_id].present?
       non_profit = NonProfit.find(params[:non_profit_id])
-      puts "Non Profit of #{non_profit.inspect}"
       deductible = (non_profit.exemption_code > 0)
     else 
       non_profit = nil
@@ -96,7 +95,6 @@ class DonationsController < ApplicationController
       to = contents.match(/(?<=To: )(.*?)(?=\n)/).try(:to_s)
       subject = contents.match(/(?<=Subject: )(.*?)(?=\n)/).try(:to_s)
       body = contents.match(/(?<=Content-Type: text\/html; charset\=UTF-8)(.*?)(?=--)/m).try(:to_s)
-      puts "Body of #{body}"
       #render text: 'email created', status: :created 
     end
   end
