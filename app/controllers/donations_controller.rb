@@ -41,10 +41,9 @@ class DonationsController < ApplicationController
   # POST /donations
   # POST /donations.json
   def create
-    puts "Non Profit String of "+params[:donation][:NonProfit_id]
     if params[:non_profit_id].present?
       non_profit = NonProfit.find(params[:non_profit_id])
-      deductible = non_profit.tax_exempt
+      deductible = (non_profit.exemption_code > 0)
     end
     @donation = Donation.new(donation_params.merge(:User => @current_user, :NonProfit => non_profit, :deductible => deductible, :non_profit_string => params[:donation][:non_profit_string]))
 
