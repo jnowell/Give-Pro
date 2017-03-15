@@ -1,29 +1,38 @@
-<p id="notice"><%= notice %></p>
+<h1>Donation Details</h1>
 
-<p>
-  <strong>Amount:</strong>
-  <%= @donation.amount %>
-</p>
+<div class="donation">
+  <div class="container">
+    <div class="form">
 
-<p>
-  <strong>Donation date:</strong>
-  <%= @donation.donation_date %>
-</p>
+      <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Recurring:</strong>
-  <%= @donation.recurring %>
-</p>
+      <div class="field">
+        <strong>Amount:</strong><br/>
+        <%= number_to_currency(@donation.amount) %>
+      </div>
 
-<p>
-  <strong>Matching:</strong>
-  <%= @donation.matching %>
-</p>
+      <div class="field">
+        <strong>Donation date:</strong><br/>
+        <%= @donation.donation_date.strftime('%_m/%-d/%Y') %>
+      </div>
 
-<p>
-  <strong>Nonprofit:</strong>
-  <%= @donation.NonProfit.name %>
-</p>
+      <div class="field">
+        <strong>Recurring:</strong><br/>
+        <%= @donation.recurring %>
+      </div>
 
-<%= link_to 'Edit', edit_donation_path(@donation) %> |
-<%= link_to 'Back', donations_path %>
+      <div class="field">
+        <strong>Matching:</strong><br/>
+        <%= @donation.matching %>
+      </div>
+
+      <div class="field">
+        <strong>Nonprofit:</strong><br/>
+        <%= @donation.non_profit_string %>
+      </div>
+
+      <%= link_to 'Edit', edit_donation_path(@donation) %> |
+      <%= link_to 'Back', donations_path %>
+    </div>
+  </div>
+</div>
