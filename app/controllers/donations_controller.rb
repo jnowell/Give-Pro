@@ -115,7 +115,7 @@ class DonationsController < ApplicationController
       @donation = Donation.find(params[:id])
       #this is to ensure that number shows up in currency form on edit form...
       #has to be a less hacky way to do this in the view, and yet, here we are
-      @donation.amount = '%.2f' % @donation.amount
+      @donation.amount = '%.03f' % @donation.amount
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
