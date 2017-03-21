@@ -40,7 +40,7 @@
           .orient("bottom").tickSize(5).tickSubdivide(true).tickValues([lineData[2].date,lineData[5].date,lineData[8].date,lineData[11].date]);
          
         var yAxis = d3.svg.axis().scale(y).tickFormat(d3.format("$"))
-          .orient("left").tickSize(5).tickSubdivide(true);
+          .orient("left").tickSize(5).ticks(5).tickSubdivide(true);
          
         // Define the line
         var valueline = d3.svg.line()
