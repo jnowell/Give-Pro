@@ -4,31 +4,18 @@
           <h3>Amount Given In <%= Time.now.year %></h3>
           <span class="value"><%= number_to_currency(@annual_sum) %></span>
         </div>
+      </div>
+      <div class="col-xs-6 col-sm-4 placeholder topline">
         <div class="total">
             <h3>Amount Tax-Exempt:</h3>
             <span class="value"><%= number_to_currency(@exempt_sum) %></span>
         </div>
+      </div>
+      <div class="col-xs-6 col-sm-4 placeholder topline">
         <div class="total">
             <h3>Total Amount Given:</h3>
             <span class="value"><%= number_to_currency(@total_sum) %></span>
         </div>
-      </div>
-      <div class="col xs-6 col-sm-4 placeholder income">
-          <%= render 'shared/_income' %>
-      </div>
-      <div class="col-xs-6 col-sm-4 placeholder pie" style="display:none">
-          <div id="pie_chart"></div>
-          <h4>Organization Type</h4>
-          <span class="text-muted">Broken Down By Subsection</span>
-      </div>
-      <% if @total_sum > 0 %>
-        <div class="col-xs-6 col-sm-4 placeholder time">
-      <% else %>
-        <div class="col-xs-6 col-sm-4 placeholder" style="display:none">
-      <% end %>
-          <svg id="line_chart"></svg>
-          <h4>Giving Over Time</h4>
-          <span class="text-muted">Broken Down By Month</span>
       </div>
   </div>
 
@@ -51,9 +38,31 @@
           <div class="donation-data">
             <p class="card-text amount"><%= number_to_currency(donation.amount) %></p>
             <p class="card-text date"><%= donation.donation_date.strftime('%_m/%-d/%Y') %></p>
-            <%= link_to 'More Info', donation, class: 'card-link' %></td>
+            <%= link_to 'Edit', edit_donation_path(donation.id), class: 'card-link' %></td>
           </div>
         </div>
       </div>
     <% end %>
+  </div>
+
+  <%= link_to 'Enter New Donation', new_donation_path, class: "btn btn-primary new-donation" %>
+
+  <h1 class="page-header">Summary Data</h1>
+
+  <div class="row placeholders">
+      <div class="col xs-6 col-sm-4 placeholder income">
+          <%= render 'shared/_income' %>
+      </div>
+      <% if @total_sum > 0 %>
+        <div class="col-xs-6 col-sm-4 placeholder pie">
+          <div id="pie_chart"></div>
+          <h4>Organization Type</h4>
+          <span class="text-muted">Broken Down By Subsection</span>
+        </div>
+         <div class="col-xs-6 col-sm-4 placeholder time">
+          <svg id="line_chart"></svg>
+          <h4>Giving Over Time</h4>
+          <span class="text-muted">Broken Down By Month</span>
+         </div>
+      <% end %>
   </div>

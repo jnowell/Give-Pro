@@ -176,6 +176,10 @@ a.btn {
   color: #FFFFFF;
 }
 
+a.btn.new-donation {
+  margin: 10px;
+}
+
 .btn-submit {
   color: #FFFFFF;
   font-size: 18px;
