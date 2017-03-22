@@ -1,5 +1,6 @@
 class NonProfitsController < ApplicationController
   before_action :set_non_profit, only: [:show, :edit, :update, :destroy]
+  before_action :check_admin
 
   # GET /non_profits
   # GET /non_profits.json
@@ -69,6 +70,13 @@ class NonProfitsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_non_profit
       @non_profit = NonProfit.find(params[:id])
+    end
+
+    def check_admin
+      logged_in_user = User.find(session[:user_id])
+      unless logged_in_user.admin
+        redirect_to '/'
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

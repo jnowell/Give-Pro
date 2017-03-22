@@ -26,6 +26,9 @@ class DonationsController < ApplicationController
 
   # GET /donations/1/edit
   def edit
+    if (@donation.User.id != session[:user_id])
+      redirect_to '/'
+    end
   end
 
   def preview

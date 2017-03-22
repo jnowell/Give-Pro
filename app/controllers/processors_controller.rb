@@ -1,5 +1,6 @@
 class ProcessorsController < ApplicationController
   before_action :set_processor, only: [:show, :edit, :update, :destroy]
+  before_action :check_admin
 
   # GET /processors
   # GET /processors.json
@@ -65,6 +66,13 @@ class ProcessorsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_processor
       @processor = Processor.find(params[:id])
+    end
+
+    def check_admin
+      logged_in_user = User.find(session[:user_id])
+      unless logged_in_user.admin
+        redirect_to '/'
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
