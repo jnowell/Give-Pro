@@ -101,6 +101,17 @@
   margin-bottom: 0px;
 }
 
+.field {
+  position: relative;
+}
+
+.field span.dollar {
+  margin-left: -18px;
+  float: left;
+  padding-top: 40px;
+  font-size: 1.5em;
+}
+
 /*
  * Line chart
  */
