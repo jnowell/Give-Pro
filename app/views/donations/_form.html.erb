@@ -14,7 +14,8 @@
 
   <div class="field">
     <%= f.label :amount %>
-    <%= f.number_field(:amount, precision: 2)  %>
+    <span class="dollar">$</span>
+    <%= f.number_field(:amount, precision: 2, step: :any)  %>
   </div>
   <div class="field">
   <% if @donation.errors.any? and @donation.errors[:non_profit_string] %>
