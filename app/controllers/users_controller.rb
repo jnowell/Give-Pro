@@ -3,6 +3,7 @@ require 'google/api_client/client_secrets'
 
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :save_income]
+  before_action :check_admin, only: [:index]
   
 
   CREDENTIALS_PATH = File.join(Dir.home, '.credentials',
@@ -172,6 +173,13 @@ class UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
+    end
+
+    def check_admin
+      logged_in_user = User.find(session[:user_id])
+      unless logged_in_user.admin
+        redirect_to '/'
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

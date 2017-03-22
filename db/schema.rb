@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170204190802) do
+ActiveRecord::Schema.define(version: 20170322013031) do
 
   create_table "donations", force: :cascade do |t|
     t.float    "amount"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20170204190802) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.string   "password_reset_token"
+    t.boolean  "admin"
   end
 
   add_index "users", ["password_reset_token"], name: "index_users_on_password_reset_token"
