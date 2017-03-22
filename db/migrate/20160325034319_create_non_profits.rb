@@ -4,7 +4,15 @@ class CreateNonProfits < ActiveRecord::Migration
       t.integer :ein
       t.string :name
       t.string :alias
-      t.boolean :tax_exempt
+      t.string :address
+      t.string :city
+      t.string :state
+      t.string :zip
+      t.integer :subscection
+      t.integer :classification
+      t.datetime :ruling_date
+      t.integer :exemption_code
+      t.integer :foundation_code
       t.string :domain_name
       t.string :status_code
       t.string :donation_page_url
