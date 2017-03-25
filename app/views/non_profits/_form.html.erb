@@ -40,6 +40,16 @@
     <%= f.text_field :zip %>
   </div>
   <div class="field">
+    <%= f.label :image %><br>
+    <%= f.file_field :image %>
+    <% if f.object.image? %>
+      <br/>
+      <%= image_tag f.object.image.thumb.url %>
+      <%= f.label :remove_image %>
+      <%= f.check_box :remove_image %> 
+    <% end %>
+  </div>
+  <div class="field">
     <%= f.label :exemption_code %><br>
     <%= f.text_field :exemption_code %>
   </div>
@@ -70,10 +80,6 @@
   <div class="field">
     <%= f.label :donation_page_url %><br>
     <%= f.text_field :donation_page_url %>
-  </div>
-  <div class="field">
-    <%= f.label :image_url %><br>
-    <%= f.text_field :image_url %>
   </div>
   <div class="actions">
     <%= f.submit "Submit", class: "btn-submit" %>
