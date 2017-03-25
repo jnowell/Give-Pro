@@ -25,7 +25,7 @@
     <% @donations.each do |donation| %>
       <div class="card" style="width:25rem;">
         <% if donation.has_image %>
-          <%= image_tag("org_logos/"+donation.NonProfit.id.to_s+"."+donation.NonProfit.image_url, class: "card-img-top", alt: donation.NonProfit.alias) %>
+          <%= image_tag(donation.NonProfit.image.thumb.url, class: "card-img-top", alt: donation.NonProfit.alias) %>
         <% end %>
         <div class="card-block">
           <% if donation.has_image %>
