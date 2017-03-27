@@ -189,8 +189,29 @@ span.ui-helper-hidden-accessible {
   bottom:25px;
 }
 
+.tax .card-text.amount {
+  bottom:55px;
+}
+
+.tax .card-text.date {
+  bottom: 30px;
+}
+
+.tax-link {
+  padding-left: 50px;
+  font-size:1.2em;
+}
+
+.card-text.ein {
+  bottom:15px;
+}
+
 .donation-data {
   height: 65px;
+}
+
+.donation-data.tax {
+  height: 70px;
 }
 
 @media (min-width: 576px) {

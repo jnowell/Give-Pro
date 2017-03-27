@@ -83,6 +83,16 @@ class DonationsController < ApplicationController
     end
   end
 
+  def tax_receipt
+    @donations = Donation.where("user_id = ?", session[:user_id]).where("cast(strftime('%Y', donation_date) as int) = ?",params[:year]).where("deductible = ?", true)
+
+    @year = params[:year]
+    @total_sum = 0
+    for donation in @donations
+      @total_sum += donation.amount
+    end
+  end
+
   def read_receipt
     if params[:token] && (params[:token] == 'test_token')
       puts "READ RECEIPT CALLED WITH MESSAGE OF" +params[:message_id].to_s
