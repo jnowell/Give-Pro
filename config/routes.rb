@@ -9,11 +9,12 @@ Rails.application.routes.draw do
 
   resources :non_profits
   resources :donations do
+    get :tax_receipt, :on => :collection
     get :read_receipt, :on => :collection
     get :autocomplete_non_profit_alias, :on => :collection
   end
   resources :password_resets, only: [:new, :create, :edit, :update]
-  post 'password_resets/:id', to: :update, controller: 'password_resets'
+  post 'password_resets/:id', action: :update, controller: 'password_resets'
 
   root :to => 'donations#preview'
 

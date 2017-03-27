@@ -1,0 +1,49 @@
+
+
+<div class="donations">
+  <div class="container">
+    <div class="show">
+
+      <h1 class="page-header"><%= @year %> Tax Receipt</h1>
+
+	  <div class="card-deck clearfix">
+	    <% @donations.each do |donation| %>
+	      <div class="card" style="width:25rem;">
+	        <% if donation.has_image %>
+	          <%= image_tag(donation.NonProfit.image.thumb.url, class: "card-img-top", alt: donation.NonProfit.alias) %>
+	        <% end %>
+	        <div class="card-block">
+	          <% if donation.has_image %>
+	            <h4 class="card-title">
+	          <% else %>
+	            <h4 class="card-title noimage">
+	          <% end %>
+	            <%= donation.non_profit_string %>
+	          </h4>
+	          <div class="donation-data tax">
+	            <p class="card-text amount"><%= number_to_currency(donation.amount) %></p>
+	            <p class="card-text date"><%= donation.donation_date.strftime('%_m/%-d/%Y') %></p>
+	            <p class="card-text ein">EIN: <%= donation.NonProfit.ein %></p>
+	          </div>
+	        </div>
+	      </div>
+	    <% end %>
+	  </div>
+
+	  <div class="row placeholders">
+	      <div class="col-xs-6 col-sm-4 placeholder topline">
+	      </div>
+	      <div class="col-xs-6 col-sm-4 placeholder topline">
+	        <div class="total">
+	            <h3>Total Amount Tax-Exempt:</h3>
+	            <span class="value"><%= number_to_currency(@total_sum) %></span>
+	        </div>
+	      </div>
+	      <div class="col-xs-6 col-sm-4 placeholder topline">
+	      </div>
+	  </div>
+
+
+	</div>
+  </div>
+</div>
