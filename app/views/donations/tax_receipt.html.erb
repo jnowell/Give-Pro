@@ -23,7 +23,9 @@
 	          <div class="donation-data tax">
 	            <p class="card-text amount"><%= number_to_currency(donation.amount) %></p>
 	            <p class="card-text date"><%= donation.donation_date.strftime('%_m/%-d/%Y') %></p>
-	            <p class="card-text ein">EIN: <%= donation.NonProfit.ein %></p>
+	            <% if donation.NonProfit.present? %>
+	            	<p class="card-text ein">EIN: <%= donation.NonProfit.ein %></p>
+	            <% end %>
 	          </div>
 	        </div>
 	      </div>
@@ -42,6 +44,8 @@
 	      <div class="col-xs-6 col-sm-4 placeholder topline">
 	      </div>
 	  </div>
+
+	  <p class="disclaimer">Disclaimer: GivePro can not legally guarantee that all donations included in this receipt are legally tax-deductible. If you're unsure if a given donation is deductible, please confirm with another source.</p>
 
 
 	</div>
