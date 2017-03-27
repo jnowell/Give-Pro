@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
 	    @user = user
 	    redirect_to '/'
 	  else
-	    redirect_to '/login'
+	    redirect_to '/login', :flash => { :error => "Invalid username/password. If you cannot remember your password, please use Forgot Password." } 
 	  end 
 	end
 

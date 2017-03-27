@@ -4,6 +4,16 @@
 
 			<h1>Login</h1>
 
+			<% if !flash.empty? %>
+		      <div id="error_explanation">
+		        <% flash.keys.each do |k| %> 
+		        <p>
+		          <%= flash[k] %>
+		        </p>
+		        <% end %>   
+		      </div>
+		    <% end %>
+
 			<%= render 'form' %>
 		</div>
 	</div>
