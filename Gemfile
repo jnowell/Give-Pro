@@ -20,6 +20,9 @@ gem 'google-api-client', '0.9'
 
 gem 'google-search'
 
+gem 'carrierwave', '~> 0.10.0'
+gem 'mini_magick', '~> 4.3'
+
 gem 'searchbing'
 
 gem 'omniauth', '~> 1.2.2'
@@ -34,6 +37,8 @@ gem 'bootstrap-sass'
 
 gem 'curb'
 gem 'ruby-web-search'
+
+gem 'google_custom_search_api'
 
 gem 'bcrypt'
 
@@ -55,6 +60,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'figaro'
 gem 'puma'
+
+gem 'json'
+gem 'rest-client'
 
 
 # Use ActiveModel has_secure_password
