@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322013031) do
+ActiveRecord::Schema.define(version: 20170325154912) do
 
   create_table "donations", force: :cascade do |t|
     t.float    "amount"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20170322013031) do
   create_table "non_profits", force: :cascade do |t|
     t.integer  "ein"
     t.string   "name"
-    t.string   "alias"
+    t.string   "alias",             default: "ActiveRecord::Schema"
     t.string   "address"
     t.string   "city"
     t.string   "state"
@@ -46,12 +46,14 @@ ActiveRecord::Schema.define(version: 20170322013031) do
     t.string   "domain_name"
     t.integer  "foundation_code"
     t.string   "donation_page_url"
-    t.string   "image_url"
+    t.string   "image"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
     t.string   "amount_regex"
     t.string   "country"
   end
+
+  add_index "non_profits", ["alias"], name: "index_non_profits_on_alias"
 
   create_table "processors", force: :cascade do |t|
     t.string   "name"
@@ -63,7 +65,7 @@ ActiveRecord::Schema.define(version: 20170322013031) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
-    t.string   "password_digest"
+    t.string   "password"
     t.string   "income"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
