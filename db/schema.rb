@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(version: 20170325154912) do
   end
 
   add_index "non_profits", ["alias"], name: "index_non_profits_on_alias"
+  add_index "non_profits", ["ein"], name: "index_non_profits_on_ein", unique: true
+
 
   create_table "processors", force: :cascade do |t|
     t.string   "name"
@@ -73,6 +75,7 @@ ActiveRecord::Schema.define(version: 20170325154912) do
     t.boolean  "admin"
   end
 
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["password_reset_token"], name: "index_users_on_password_reset_token"
 
 end
