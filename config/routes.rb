@@ -16,9 +16,11 @@ Rails.application.routes.draw do
   resources :password_resets, only: [:new, :create, :edit, :update]
   post 'password_resets/:id', action: :update, controller: 'password_resets'
 
-  root :to => 'donations#preview'
+  root :to => 'pages#show', page: 'home'
 
   get 'signup'  => 'users#new' 
+
+  get "/pages/:page" => "pages#show"
 
   get 'login' => 'sessions#new', as: 'login'
   post 'login' => 'sessions#create'
