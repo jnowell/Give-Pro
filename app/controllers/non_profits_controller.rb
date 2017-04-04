@@ -81,6 +81,6 @@ class NonProfitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def non_profit_params
-      params.require(:non_profit).permit(:ein, :name, :alias, :tax_exempt, :domain_name, :amount_regex, :status_code, :donation_page_url, :image, :remove_image)
+      params.require(:non_profit).permit(:ein, :name, :alias, :tax_exempt, :domain_name, :amount_regex, :status_code, :donation_page_url, :image, :remove_image, :homepage)
     end
 end
