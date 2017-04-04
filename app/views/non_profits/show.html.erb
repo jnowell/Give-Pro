@@ -1,84 +1,92 @@
-<p id="notice"><%= notice %></p>
+<div class="non_profit">
+  <div class="container">
+    <div class="form">
 
-<p>
-  <strong>Ein:</strong>
-  <%= @non_profit.ein %>
-</p>
+      <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @non_profit.name %>
-</p>
+      <p>
+        <strong>Ein:</strong>
+        <%= @non_profit.ein %>
+      </p>
 
-<p>
-  <strong>Alias:</strong>
-  <%= @non_profit.alias %>
-</p>
+      <p>
+        <strong>Name:</strong>
+        <%= @non_profit.name %>
+      </p>
 
-<p>
-  <strong>Address:</strong>
-  <%= @non_profit.address %>
-</p>
+      <p>
+        <strong>Alias:</strong>
+        <%= @non_profit.alias %>
+      </p>
 
-<p>
-  <strong>City:</strong>
-  <%= @non_profit.city %>
-</p>
+      <p>
+        <strong>Address:</strong>
+        <%= @non_profit.address %>
+      </p>
 
-<p>
-  <strong>State:</strong>
-  <%= @non_profit.state %>
-</p>
+      <p>
+        <strong>City:</strong>
+        <%= @non_profit.city %>
+      </p>
 
-<p>
-  <strong>Zip:</strong>
-  <%= @non_profit.zip %>
-</p>
+      <p>
+        <strong>State:</strong>
+        <%= @non_profit.state %>
+      </p>
 
-<p>
-  <strong>Image:</strong>
-  <%= image_tag @non_profit.image.thumb.url %>
-</p>
+      <p>
+        <strong>Zip:</strong>
+        <%= @non_profit.zip %>
+      </p>
 
-<p>
-  <strong>Subsection:</strong>
-  <%= @non_profit.subsection %>
-</p>
+      <p>
+        <strong>Image:</strong>
+        <%= image_tag @non_profit.image.thumb.url %>
+      </p>
 
-<p>
-  <strong>Classification:</strong>
-  <%= @non_profit.classification %>
-</p>
+      <p>
+        <strong>Subsection:</strong>
+        <%= @non_profit.subsection %>
+      </p>
 
-<p>
-  <strong>Ruling Date:</strong>
-  <%= @non_profit.ruling_date %>
-</p>
+      <p>
+        <strong>Classification:</strong>
+        <%= @non_profit.classification %>
+      </p>
 
-<p>
-  <strong>Domain Name:</strong>
-  <%= @non_profit.domain_name %>
-</p>
+      <p>
+        <strong>Ruling Date:</strong>
+        <%= @non_profit.ruling_date %>
+      </p>
 
-<p>
-  <strong>Exemption Code:</strong>
-  <%= @non_profit.exemption_code %>
-</p>
+      <p>
+        <strong>Domain Name:</strong>
+        <%= @non_profit.domain_name %>
+      </p>
 
-<p>
-  <strong>Foundation Code:</strong>
-  <%= @non_profit.foundation_code %>
-</p>
+      <p>
+        <strong>Exemption Code:</strong>
+        <%= @non_profit.exemption_code %>
+      </p>
 
-<p>
-  <strong>Donation page url:</strong>
-  <%= @non_profit.donation_page_url %>
-</p>
+      <p>
+        <strong>Foundation Code:</strong>
+        <%= @non_profit.foundation_code %>
+      </p>
 
-<p>
-  <strong>Image URL:</strong>
-  <%= @non_profit.image_url %>
-</p>
+      <p>
+        <strong>Donation page url:</strong>
+        <%= @non_profit.donation_page_url %>
+      </p>
 
-<%= link_to 'Edit', edit_non_profit_path(@non_profit) %> |
-<%= link_to 'Back', non_profits_path %>
+      <p>
+        <strong>Image URL:</strong>
+        <%= @non_profit.image_url %>
+      </p>
+
+      <%= link_to 'Edit', edit_non_profit_path(@non_profit) %> |
+      <%= link_to 'Back', non_profits_path %>
+    </div>
+  </div>
+</div>
+
