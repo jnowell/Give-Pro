@@ -1,5 +1,6 @@
 require 'google/apis/gmail_v1'
 require 'google/api_client/client_secrets'
+require './lib/scripts/mail_scraper.rb'
 
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :save_income]
@@ -65,7 +66,7 @@ class UsersController < ApplicationController
     unless session.has_key?(:credentials)
       redirect to('/oauth2callback')
     end
-    puts session[:credentials].inspect
+    #puts session[:credentials].inspect
     client_opts = JSON.parse(session[:credentials])
     auth_client = Signet::OAuth2::Client.new(client_opts)
 
@@ -79,27 +80,92 @@ class UsersController < ApplicationController
     service.client_options.application_name = "GivePro" 
     service.authorization = auth_client
 
-    # Show the user's labels
-    user_id = 'me'
-    result = service.list_user_messages(user_id, label_ids: ['INBOX'], q: "from:*.org")
-    
-    for message in result.messages
-      message_content = service.get_user_message(user_id,message.id)
-      for header in message_content.payload.headers
-        if header.name == "Subject"
-          #puts header.value
-        end
+    processors = ::Processor.all
+
+    processor_string = ""
+    for processor in processors
+      unless processor.domain.end_with? ".org"
+        processor_string << "|"
+        processor_string << processor.domain
       end
     end
 
-    watch_request = Google::Apis::GmailV1::WatchRequest.new
-    watch_request.topic_name = WATCH_TOPIC_NAME
-    watch_request.label_ids = ['INBOX']
+    puts "PROCESSOR STRING OF #{processor_string}"
 
-    response = service.watch_user(user_id, watch_request)
-    puts response.inspect
+    # Show the user's labels
+    user_id = 'me'
+    result = service.list_user_messages(user_id, label_ids: ['INBOX'], q: "subject:(thank|receipt|contribution|donation) from:(*.org#{processor_string}")
+    count = 0
+    donation_count = 0
+    for message in result.messages
+      count += 1
+      #puts "COUNT OF #{count}"
+      message_content = service.get_user_message(user_id,message.id)
+      #puts "MESSAGE CONTENT OF #{message_content.payload.body }"
+      if message_content.payload.parts.present?
+        for part in message_content.payload.parts
+          if part.part_id == "0"
+            content = part.body.data
+          end
+        end
+      elsif message_content.payload.body.data.present?
+        content = message_content.payload.body.data
+      end
+      for header in message_content.payload.headers
+         puts "HEADER NAME OF #{header.name}"
+        #puts "HEADER VALUE OF #{header.value}"
+        if header.name == "Subject"
+          subject = header.value
+        end
+        if header.name == "From"
+          #puts "HEADER VALUE OF #{header.value}"
+          from_match = header.value.scan(/[\s\w]*<?([\w\-.]+@[\w.]+\.\w{3})>?/)
+          #from_match = from_regex.match(stripped_content)
+          if from_match.length > 1
+            puts 'More than 1 match for From regex'
+          end
+          from_email = from_match[0][0].to_s
+        end
+        if header.name == "To"
+          # ignore for now...maybe need later
+        end
+        if header.name == "Date"
+          begin
+            #Tue, 21 Mar 2017 17:40:16 +0000
+            date = Date.strptime(header.value,'%a, %d %b %Y %k:%M:%S %z')
+          rescue ArgumentError
+            #puts "ERROR PARSING DATE #{header.value}"
+            #date = Date.strptime(header.value,'%a, %b %d, %Y at %l:%M %p')
+          end
+        end
+      end
+      puts "Content of #{content}"
+      if content.present?
+        logged_in_user = User.find(session[:user_id])
+        #puts "CALLING PARSE EMAIL WITH SUBJECT #{subject} AND FROM EMAIL #{from_email} AND TO EMAIL #{logged_in_user.email} AND DATE #{date}"
+        #scraper = .new
+        if MailScraper.parse_email(content, subject, from_email, logged_in_user.email, date)
+          donation_count += 1
+        end
+      end
+      if count > 5
+        break
+      end
+    end
 
-    redirect_to :action => 'preview'
+    puts "DONATION COUNT OF #{donation_count}"
+
+    #watch_request = Google::Apis::GmailV1::WatchRequest.new
+    #watch_request.topic_name = WATCH_TOPIC_NAME
+    #watch_request.label_ids = ['INBOX']
+
+    #response = service.watch_user(user_id, watch_request)
+    #puts response.inspect
+    if donation_count > 0
+      redirect_to donations_path
+    else
+      redirect_to :action => 'preview'
+    end
   end
 
   def save_income
