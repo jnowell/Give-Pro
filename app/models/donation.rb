@@ -7,6 +7,6 @@ class Donation < ActiveRecord::Base
   validates :non_profit_string, presence: true
 
   def has_image
-	return (!(self.NonProfit.nil?) and (self.NonProfit.image.present?))
+	return ((!(self.NonProfit.nil?) and (self.NonProfit.image.present?)) or (!(self.Processor.nil?) and (self.Processor.image.present?)))
   end
 end
