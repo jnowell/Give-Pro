@@ -20,6 +20,16 @@
     <%= f.text_field :domain %>
   </div>
   <div class="field">
+    <%= f.label :image %><br>
+    <%= f.file_field :image %>
+    <% if f.object.image? %>
+      <br/>
+      <%= image_tag f.object.image.thumb.url %>
+      <%= f.label :remove_image %>
+      <%= f.check_box :remove_image %> 
+    <% end %>
+  </div>
+  <div class="field">
     <%= f.label :regex %><br>
     <%= f.text_field :regex %>
   </div>
