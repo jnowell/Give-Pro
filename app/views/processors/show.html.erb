@@ -1,19 +1,31 @@
-<p id="notice"><%= notice %></p>
+<div class="processor">
+	<div class="container">
+		<div class="form">
 
-<p>
-  <strong>Name:</strong>
-  <%= @processor.name %>
-</p>
+			<p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Domain:</strong>
-  <%= @processor.domain %>
-</p>
+			<p>
+			  <strong>Name:</strong>
+			  <%= @processor.name %>
+			</p>
 
-<p>
-  <strong>Regex:</strong>
-  <%= @processor.regex %>
-</p>
+			<p>
+			  <strong>Domain:</strong>
+			  <%= @processor.domain %>
+			</p>
 
-<%= link_to 'Edit', edit_processor_path(@processor) %> |
-<%= link_to 'Back', processors_path %>
+			<p>
+			  <strong>Image:</strong>
+			  <%= image_tag @processor.image.thumb.url %>
+			</p>
+
+			<p>
+			  <strong>Regex:</strong>
+			  <%= @processor.regex %>
+			</p>
+
+			<%= link_to 'Edit', edit_processor_path(@processor) %> |
+			<%= link_to 'Back', processors_path %>
+		</div>
+	</div>
+</div>

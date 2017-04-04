@@ -77,6 +77,6 @@ class ProcessorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def processor_params
-      params.require(:processor).permit(:name, :domain, :regex)
+      params.require(:processor).permit(:name, :domain, :regex, :image, :remove_image)
     end
 end
