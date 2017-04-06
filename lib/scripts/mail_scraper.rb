@@ -224,7 +224,7 @@ class MailScraper
 	end
 end
 
-if ARGV[0]
+if false
   filename = ARGV[0]
   filename = filename.to_s
   puts 'File of '+filename
