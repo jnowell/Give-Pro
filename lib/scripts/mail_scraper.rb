@@ -224,11 +224,11 @@ class MailScraper
 	end
 end
 
-if false
-  filename = ARGV[0]
-  filename = filename.to_s
-  puts 'File of '+filename
-  file = File.open(filename, "rb")
-  contents = file.read
-  MailScraper.parse_raw_content(contents)
-end
+#if false
+#  filename = ARGV[0]
+#  filename = filename.to_s
+#  puts 'File of '+filename
+#  file = File.open(filename, "rb")
+#  contents = file.read
+#  MailScraper.parse_raw_content(contents)
+#end
