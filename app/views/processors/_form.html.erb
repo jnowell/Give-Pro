@@ -30,8 +30,16 @@
     <% end %>
   </div>
   <div class="field">
-    <%= f.label :regex %><br>
-    <%= f.text_field :regex %>
+    <%= f.label :org_regex %><br>
+    <%= f.text_field :org_regex %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_regex %><br>
+    <%= f.text_field :amount_regex %>
+  </div>
+  <div class="field">
+    <%= f.check_box :requires_org  %>
+    <%= f.label :matching, "This processor requires a link to a non-profit org" %>
   </div>
   <div class="actions">
     <%= f.submit "Submit", class: "btn-submit" %>
