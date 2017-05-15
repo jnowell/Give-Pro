@@ -25,11 +25,13 @@
     <% @donations.each do |donation| %>
       <div class="card" style="width:25rem;">
         <% if donation.has_image %>
-          <% if donation.NonProfit.present %>
-            <%= image_tag(donation.NonProfit.image.thumb.url, class: "card-img-top", alt: donation.NonProfit.alias) %>
-          <% elsif donation.Processor.present %>
-            <%= image_tag(donation.Processor.image.thumb.url, class: "card-img-top", alt: donation.Processor.name) %>
-          <% end %>
+          <div class="image">
+            <% if donation.NonProfit %>
+              <%= image_tag(donation.NonProfit.image.thumb.url, class: "card-img-top", alt: donation.NonProfit.alias) %>
+            <% elsif donation.Processor %>
+              <%= image_tag(donation.Processor.image.thumb.url, class: "card-img-top", alt: donation.Processor.name) %>
+            <% end %>
+          </div>
         <% end %>
         <div class="card-block">
           <% if donation.has_image %>
@@ -55,8 +57,6 @@
   <span class="tax-link"><%= link_to "View #{Time.current.year - 1} Tax Receipt", tax_receipt_donations_path(:year => Time.current.year - 1) %></span>
 
   </div>
-
-  <h1 class="page-header">Summary Data</h1>
 
   <div class="row placeholders">
       <div class="col xs-6 col-sm-4 placeholder income">
