@@ -1,7 +1,7 @@
 class DonationsController < ApplicationController
   before_action :require_user, except: [:preview, :read_receipt]
   before_action :set_donation, only: [:show, :edit, :update, :destroy]
-  autocomplete :non_profit, :alias
+  autocomplete :non_profit, :alias, :"data-autocomplete-label" => "No results found."
   
 
   # GET /donations
