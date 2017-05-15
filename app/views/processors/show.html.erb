@@ -20,9 +20,19 @@
 			</p>
 
 			<p>
-			  <strong>Regex:</strong>
-			  <%= @processor.regex %>
+			  <strong>Org Regex:</strong>
+			  <%= @processor.org_regex %>
 			</p>
+
+			<p>
+			  <strong>Amount Regex:</strong>
+			  <%= @processor.amount_regex %>
+			</p>
+
+			<p>
+		      <strong>Requires Org:</strong><br/>
+		      <%= @processor.requires_org %>
+		    </p>
 
 			<%= link_to 'Edit', edit_processor_path(@processor) %> |
 			<%= link_to 'Back', processors_path %>
