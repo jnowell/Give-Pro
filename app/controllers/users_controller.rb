@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     if (@user.id != session[:user_id])
-      redirect_to '/'
+      redirect_to donations_path
     end
   end
 
@@ -94,66 +94,67 @@ class UsersController < ApplicationController
 
     # Show the user's labels
     user_id = 'me'
-    result = service.list_user_messages(user_id, label_ids: ['INBOX'], q: "subject:(thank|receipt|contribution|donation) from:(*.org#{processor_string}")
+    #result = service.list_user_messages(user_id, label_ids: ['CATEGORY_UPDATES'], q: "subject:(thank|receipt|contribution|donation) from:(*.org#{processor_string})")
+    result = service.list_user_messages(user_id, label_ids: ['CATEGORY_UPDATES'], q: "subject:(thank|receipt|contribution|donation) from:globalgiving.org")
+
     count = 0
     donation_count = 0
-    for message in result.messages
-      count += 1
-      #puts "COUNT OF #{count}"
-      message_content = service.get_user_message(user_id,message.id)
-      #puts "MESSAGE CONTENT OF #{message_content.payload.body }"
-      if message_content.payload.parts.present?
-        for part in message_content.payload.parts
-          if part.part_id == "0"
-            content = part.body.data
+    if result.messages
+      for message in result.messages
+        count += 1
+        #puts "COUNT OF #{count}"
+        content = ''
+        message_content = service.get_user_message(user_id,message.id)
+        if message_content.payload.parts.present?
+          for part in message_content.payload.parts
+            puts "PART OF #{part.inspect}"
+            #generally part with part_id of 0 is one that has content, but not always the case
+            if part.part_id = "1" and !part.body.data.blank?
+              content << part.body.data
+            end
           end
+        elsif message_content.payload.body.data.present?
+          content = message_content.payload.body.data
         end
-      elsif message_content.payload.body.data.present?
-        content = message_content.payload.body.data
-      end
-      for header in message_content.payload.headers
-         puts "HEADER NAME OF #{header.name}"
-        #puts "HEADER VALUE OF #{header.value}"
-        if header.name == "Subject"
-          subject = header.value
-        end
-        if header.name == "From"
+        for header in message_content.payload.headers
+           puts "HEADER NAME OF #{header.name}"
           #puts "HEADER VALUE OF #{header.value}"
-          from_match = header.value.scan(/[\s\w]*<?([\w\-.]+@[\w.]+\.\w{3})>?/)
-          #from_match = from_regex.match(stripped_content)
-          if from_match.length > 1
-            puts 'More than 1 match for From regex'
+          if header.name == "Subject"
+            subject = header.value
           end
-          from_email = from_match[0][0].to_s
-        end
-        if header.name == "To"
-          # ignore for now...maybe need later
-        end
-        if header.name == "Date"
-          begin
-            #Tue, 21 Mar 2017 17:40:16 +0000
-            date = Date.strptime(header.value,'%a, %d %b %Y %k:%M:%S %z')
-          rescue ArgumentError
-            #puts "ERROR PARSING DATE #{header.value}"
-            #date = Date.strptime(header.value,'%a, %b %d, %Y at %l:%M %p')
+          if header.name == "From"
+            #puts "HEADER VALUE OF #{header.value}"
+            from_match = header.value.scan(/[\s\w]*<?([\w\-.]+@[\w.]+\.\w{3})>?/)
+            #from_match = from_regex.match(stripped_content)
+            if from_match.length > 1
+              puts 'More than 1 match for From regex'
+            end
+            from_email = from_match[0][0].to_s
+          end
+          if header.name == "To"
+            # ignore for now...maybe need later
+          end
+          if header.name == "Date"
+            begin
+              #Tue, 21 Mar 2017 17:40:16 +0000
+              date = Date.strptime(header.value,'%a, %d %b %Y %k:%M:%S %z')
+            rescue ArgumentError
+              #puts "ERROR PARSING DATE #{header.value}"
+              #date = Date.strptime(header.value,'%a, %b %d, %Y at %l:%M %p')
+            end
           end
         end
-      end
-      puts "Content of #{content}"
-      if content.present?
-        logged_in_user = User.find(session[:user_id])
-        #puts "CALLING PARSE EMAIL WITH SUBJECT #{subject} AND FROM EMAIL #{from_email} AND TO EMAIL #{logged_in_user.email} AND DATE #{date}"
-        #scraper = .new
-        if MailScraper.parse_email(content, subject, from_email, logged_in_user.email, date)
-          donation_count += 1
+        puts "Content of #{content}"
+        if content.present?
+          logged_in_user = User.find(session[:user_id])
+          #puts "CALLING PARSE EMAIL WITH SUBJECT #{subject} AND FROM EMAIL #{from_email} AND TO EMAIL #{logged_in_user.email} AND DATE #{date}"
+          #scraper = .new
+          if MailScraper.parse_email(content, subject, from_email, logged_in_user.email, date)
+            donation_count += 1
+          end
         end
-      end
-      if count > 5
-        #break
       end
     end
-
-    puts "DONATION COUNT OF #{donation_count}"
 
     #watch_request = Google::Apis::GmailV1::WatchRequest.new
     #watch_request.topic_name = WATCH_TOPIC_NAME
@@ -189,7 +190,6 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
         session[:user_id] = @user.id
@@ -244,7 +244,7 @@ class UsersController < ApplicationController
     def check_admin
       logged_in_user = User.find(session[:user_id])
       unless logged_in_user.admin
-        redirect_to '/'
+        redirect_to donations_path
       end
     end
 
