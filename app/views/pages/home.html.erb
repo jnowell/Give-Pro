@@ -12,14 +12,22 @@
     <title>GivePro</title>
 
     <!-- Bootstrap Core CSS -->
+    
     <%= stylesheet_link_tag    'bootstrap.min', media: 'all' %>
 
-    <!-- Custom CSS -->
     <%= stylesheet_link_tag    'small-business', media: 'all' %>
+
+    <%= stylesheet_link_tag    'dashboard', media: 'all' %>
+
+    <!-- Custom CSS -->
+
+
 
     <%= javascript_include_tag 'jquery' %>
 
     <%= javascript_include_tag 'bootstrap' %>
+
+    <%= javascript_include_tag 'application' %>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -69,7 +77,7 @@
             <div class="col-md-4">
                 <h1>You're a giver.</h1>
                 <p>Feel good about your giving -- track it all in one place.</p>
-                <%= link_to 'Try it out', preview_users_path, class: 'btn btn-primary btn-lg' %></td>
+                <%= link_to 'Try it out', signup_path, class: 'btn btn-primary btn-lg' %></td>
             </div>
             <!-- /.col-md-4 -->
         </div>
@@ -110,19 +118,21 @@
         </div>
 
         <!-- Sample gallery -->
+        
         <div class="row">
             <div class="col-lg-12">
                 <div class="well text-center">
                     <p>
-	Here's a sample giving gallery:
-</p>
-<p>
-                <%= link_to 'Try it out', preview_users_path, class: 'btn btn-primary btn-lg' %></td>
-</p>
+	                   Here's a sample giving gallery:
+                    </p>
+                    <p>
+                        <%= link_to 'Try it out', signup_path, class: 'btn btn-primary btn-lg' %></td>
+                    </p>
                 </div>
             </div>
-
+        </div>
         <!-- /.row -->
+        <%= render "shared/dashboard", preview: true %>
 
         <!-- Footer -->
         <footer>
@@ -135,6 +145,15 @@
 
     </div>
     <!-- /.container -->
+
+    
+    <%= javascript_tag do %>
+        window.sub_json = <%= raw @sub_hash.to_json %>;
+        window.time_json = <%= raw @date_total.to_json %>;
+        $('.donation-meter .glass .amount').css('height','<%= number_to_percentage(@goal_percent) %>');
+    <% end %>
+
+    <%= javascript_include_tag "visualizations", "d3.v3.min" %>
 
 </body>
 
