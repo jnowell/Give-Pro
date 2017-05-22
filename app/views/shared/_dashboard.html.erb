@@ -50,13 +50,16 @@
       </div>
     <% end %>
   </div>
+  
+  <% if !preview %>
+    <div class="links">
+    <%= link_to 'Enter New Donation', new_donation_path, class: "btn btn-primary new-donation" %>
 
-  <div class="links">
-  <%= link_to 'Enter New Donation', new_donation_path, class: "btn btn-primary new-donation" %>
-
-  <span class="tax-link"><%= link_to "View #{Time.current.year - 1} Tax Receipt", tax_receipt_donations_path(:year => Time.current.year - 1) %></span>
-
-  </div>
+    <% if @donations.any? %>
+      <span class="tax-link"><%= link_to "View #{Time.current.year - 1} Tax Receipt", tax_receipt_donations_path(:year => Time.current.year - 1) %></span>
+    <% end %>
+    </div>
+  <% end %>
 
   <div class="row placeholders">
       <div class="col xs-6 col-sm-4 placeholder income">
@@ -66,7 +69,7 @@
         <div class="col-xs-6 col-sm-4 placeholder pie">
           <div id="pie_chart"></div>
           <h4>Organization Type</h4>
-          <span class="text-muted">Broken Down By Subsection</span>
+          <span class="text-muted">Broken Down By Subsection (According To IRS Classification)</span>
         </div>
          <div class="col-xs-6 col-sm-4 placeholder time">
           <svg id="line_chart"></svg>
