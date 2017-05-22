@@ -39,3 +39,11 @@ p  {
     font-size: 13px;
     line-height: 18px;
 }
+
+h2 {
+    text-align:center;
+}
+
+.row p.center {
+    text-align: center;
+}

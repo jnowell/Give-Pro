@@ -85,33 +85,22 @@
 
         <hr>
 
-        <!-- Call to Action Well -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="well text-center">
-                    Nonprofits and charities,<br>and political causes, crowdfunding, and your friend's 5k, too
-                </div>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <!-- /.row -->
-
         <!-- Content Row -->
         <div class="row">
             <div class="col-md-4">
                 <h2>1. Connect to Gmail</h2>
-                <%= link_to 'Get started', signup_path, class: 'btn btn-default' %></td>
-                <p><a href="">Need other options?</a></p>
+                <p class="center"><%= link_to 'Get started', signup_path, class: 'btn btn-default' %></td></p>
+                <p class="center"><a href="">Need other options?</a></p>
             </div>
             <!-- /.col-md-4 -->
             <div class="col-md-4">
                 <h2>2. We tidy your receipts</h2>
-                <p></p>
+                <p class="center">Charities,  political causes, crowdfunding, and your friend's 5K.</p>
             </div>
             <!-- /.col-md-4 -->
             <div class="col-md-4">
                 <h2>3. Get your giving gallery</h2>
-                <p>See all your favorite causes in one place. We'll give you a receipt for tax deductions, too.</p>
+                <p class="center">See all your favorite causes in one place. We'll give you a receipt for tax deductions, too.</p>
 <p></p>
             </div>
             <!-- /.col-md-4 -->
@@ -123,16 +112,19 @@
             <div class="col-lg-12">
                 <div class="well text-center">
                     <p>
-	                   Here's a sample giving gallery:
-                    </p>
-                    <p>
-                        <%= link_to 'Try it out', signup_path, class: 'btn btn-primary btn-lg' %></td>
+	                   Here's what you'll get:
                     </p>
                 </div>
             </div>
         </div>
         <!-- /.row -->
         <%= render "shared/dashboard", preview: true %>
+
+        <div class="row">
+            <p class="center">
+                <%= link_to 'Try it out', signup_path, class: 'btn btn-primary btn-lg' %></td>
+            </p>
+        </div>
 
         <!-- Footer -->
         <footer>
