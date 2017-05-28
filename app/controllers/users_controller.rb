@@ -94,65 +94,32 @@ class UsersController < ApplicationController
 
     # Show the user's labels
     user_id = 'me'
-    #result = service.list_user_messages(user_id, label_ids: ['CATEGORY_UPDATES'], q: "subject:(thank|receipt|contribution|donation) from:(*.org#{processor_string})")
-    result = service.list_user_messages(user_id, label_ids: ['CATEGORY_UPDATES'], q: "subject:(thank|receipt|contribution|donation) from:globalgiving.org")
-
-    count = 0
+   
     donation_count = 0
-    if result.messages
-      for message in result.messages
-        count += 1
-        #puts "COUNT OF #{count}"
-        content = ''
-        message_content = service.get_user_message(user_id,message.id)
-        if message_content.payload.parts.present?
-          for part in message_content.payload.parts
-            puts "PART OF #{part.inspect}"
-            #generally part with part_id of 0 is one that has content, but not always the case
-            if part.part_id = "1" and !part.body.data.blank?
-              content << part.body.data
-            end
-          end
-        elsif message_content.payload.body.data.present?
-          content = message_content.payload.body.data
+    first_call = true
+    next_page_token = nil
+    label_id = 'CATEGORY_UPDATES'
+    search_string = "subject:(thank|receipt|contribution|donation) from:(*.org#{processor_string})"
+    result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
+    donation_count = parse_result(service,user_id, result)
+    #search_string = 'subject:(thank|receipt|contribution|donation) from:globalgiving.org")'
+    puts "Result of #{result}"
+    background = false
+    if (result.next_page_token.present?)
+      logger.info "Calling new thread"
+      background = true
+      Thread.new do 
+        while (result.next_page_token.present?)
+          first_call = false
+          result = service.list_user_messages(user_id, page_token: next_page_token, label_ids: [label_id], q: search_string)
+          
+          donation_count += parse_result(service,user_id, result)
+          puts "Donation count of #{donation_count}"
+          puts "Next page of #{result.next_page_token}"
         end
-        for header in message_content.payload.headers
-           puts "HEADER NAME OF #{header.name}"
-          #puts "HEADER VALUE OF #{header.value}"
-          if header.name == "Subject"
-            subject = header.value
-          end
-          if header.name == "From"
-            #puts "HEADER VALUE OF #{header.value}"
-            from_match = header.value.scan(/[\s\w]*<?([\w\-.]+@[\w.]+\.\w{3})>?/)
-            #from_match = from_regex.match(stripped_content)
-            if from_match.length > 1
-              puts 'More than 1 match for From regex'
-            end
-            from_email = from_match[0][0].to_s
-          end
-          if header.name == "To"
-            # ignore for now...maybe need later
-          end
-          if header.name == "Date"
-            begin
-              #Tue, 21 Mar 2017 17:40:16 +0000
-              date = Date.strptime(header.value,'%a, %d %b %Y %k:%M:%S %z')
-            rescue ArgumentError
-              #puts "ERROR PARSING DATE #{header.value}"
-              #date = Date.strptime(header.value,'%a, %b %d, %Y at %l:%M %p')
-            end
-          end
-        end
-        puts "Content of #{content}"
-        if content.present?
-          logged_in_user = User.find(session[:user_id])
-          #puts "CALLING PARSE EMAIL WITH SUBJECT #{subject} AND FROM EMAIL #{from_email} AND TO EMAIL #{logged_in_user.email} AND DATE #{date}"
-          #scraper = .new
-          if MailScraper.parse_email(content, subject, from_email, logged_in_user.email, date)
-            donation_count += 1
-          end
-        end
+        logger.info "Ending thread"
+        ActiveRecord::Base.connection.close  
+        logger.info "Connection is closed"
       end
     end
 
@@ -162,8 +129,16 @@ class UsersController < ApplicationController
 
     #response = service.watch_user(user_id, watch_request)
     #puts response.inspect
+
     if donation_count > 0
-      redirect_to donations_path
+      notice = 'We have scanned your email and noticed you made a few donations, so we imported them into our database.'
+      puts "Background value of #{background}"
+      if background
+        notice << 'We are continuing to search for donations, and will add any that we find. If there are any donations that have not been added, please forward the receipts to receipts@givepro.io.'
+      else
+        notice << 'If there are any donations that have not been added, please forward the receipts to receipts@givepro.io.' 
+      end
+      redirect_to donations_path, notice: notice
     else
       redirect_to :action => 'preview'
     end
@@ -233,6 +208,70 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def parse_result(service, user_id, result)
+    count = 0
+    donation_count = 0
+    puts "Result messages of #{result.messages}"
+    if result.messages
+      for message in result.messages
+        count += 1
+        #puts "COUNT OF #{count}"
+        content = ''
+        message_content = service.get_user_message(user_id,message.id)
+        if message_content.payload.parts.present?
+          for part in message_content.payload.parts
+            puts "PART OF #{part.inspect}"
+            #generally part with part_id of 0 is one that has content, but not always the case
+            if part.part_id = "1" and !part.body.data.blank?
+              content << part.body.data
+            end
+          end
+        elsif message_content.payload.body.data.present?
+          content = message_content.payload.body.data
+        end
+        for header in message_content.payload.headers
+           puts "HEADER NAME OF #{header.name}"
+          #puts "HEADER VALUE OF #{header.value}"
+          if header.name == "Subject"
+            subject = header.value
+          end
+          if header.name == "From"
+            #puts "HEADER VALUE OF #{header.value}"
+            from_match = header.value.scan(/[\s\w]*<?([\w\-.]+@[\w.]+\.\w{3})>?/)
+            #from_match = from_regex.match(stripped_content)
+            if from_match.length > 1
+              puts 'More than 1 match for From regex'
+            end
+            from_email = from_match[0][0].to_s
+          end
+          if header.name == "To"
+            # ignore for now...maybe need later
+          end
+          if header.name == "Date"
+            begin
+              #Tue, 21 Mar 2017 17:40:16 +0000
+              date = Date.strptime(header.value,'%a, %d %b %Y %k:%M:%S %z')
+            rescue ArgumentError
+              #puts "ERROR PARSING DATE #{header.value}"
+              #date = Date.strptime(header.value,'%a, %b %d, %Y at %l:%M %p')
+            end
+          end
+        end
+        #puts "Content of #{content}"
+        logger.info "Date of #{date}"
+        if content.present?
+          logged_in_user = User.find(session[:user_id])
+          logger.info "CALLING PARSE EMAIL WITH SUBJECT #{subject} AND FROM EMAIL #{from_email} AND TO EMAIL #{logged_in_user.email} AND DATE #{date}"
+          #scraper = .new
+          if MailScraper.parse_email(content, subject, from_email, logged_in_user.email, date)
+            donation_count += 1
+          end
+        end
+      end
+    end
+    return donation_count
   end
 
   private

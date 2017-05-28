@@ -1,9 +1,13 @@
 <div class="preview">
   <div class="container">
     <div class="show">
-    	<p class="message">
-        GivePro is the best way to track all of your giving. <%= link_to 'Sign up', :controller => "users", :action => "new" %> to get your personal giving dashboard like the one below.
-    	</p>
+      <% if notice %>
+        <p id="notice" class="message"><%= notice %></p>
+      <% else %>
+      	<p class="message">
+          GivePro is the best way to track all of your giving. <%= link_to 'Sign up', :controller => "users", :action => "new" %> to get your personal giving dashboard like the one below.
+      	</p>
+      <% end %>
 
     	<%= render "shared/dashboard", preview: true %>
     </div>

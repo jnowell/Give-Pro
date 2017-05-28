@@ -4,11 +4,11 @@
   <div class="container">
     <div class="show">
 
-      <p id="notice"><%= notice %></p>
+      <p id="notice" class="message"><%= notice %></p>
 
-      <% if @donations.empty? %>
+      <% if @donations.empty? && !notice %>
         <p class="message">
-          You currently don't have any donations. To get started adding donations, either forward donation email receipts to <a href="mailto:charityemailtest@gmail.com">charityemailtest@gmail.com</a> or add them manually via our <%= link_to 'Add Donation Form', :controller => "donations", :action => "new" %>.
+          You currently don't have any donations. To get started adding donations, either forward donation email receipts to <a href="mailto:receipts@givepro.io">receipts@givepro.io</a> or add them manually via our <%= link_to 'Add Donation Form', :controller => "donations", :action => "new" %>.
         </p>
       <% end %>
 
