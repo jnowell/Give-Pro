@@ -84,7 +84,7 @@ class UsersController < ApplicationController
 
     processor_string = ""
     for processor in processors
-      unless processor.domain.end_with? ".org"
+      unless (processor.domain.end_with? ".org" or processor.check_donation_string.present?)
         processor_string << "|"
         processor_string << processor.domain
       end
@@ -96,7 +96,6 @@ class UsersController < ApplicationController
     user_id = 'me'
    
     donation_count = 0
-    first_call = true
     next_page_token = nil
     label_id = 'CATEGORY_UPDATES'
     search_string = "subject:(thank|receipt|contribution|donation) from:(*.org#{processor_string})"
@@ -104,23 +103,28 @@ class UsersController < ApplicationController
     donation_count = parse_result(service,user_id, result)
     #search_string = 'subject:(thank|receipt|contribution|donation) from:globalgiving.org")'
     puts "Result of #{result}"
-    background = false
-    if (result.next_page_token.present?)
-      logger.info "Calling new thread"
-      background = true
-      Thread.new do 
-        while (result.next_page_token.present?)
-          first_call = false
-          result = service.list_user_messages(user_id, page_token: next_page_token, label_ids: [label_id], q: search_string)
-          
-          donation_count += parse_result(service,user_id, result)
-          puts "Donation count of #{donation_count}"
-          puts "Next page of #{result.next_page_token}"
-        end
-        logger.info "Ending thread"
-        ActiveRecord::Base.connection.close  
-        logger.info "Connection is closed"
+    logger.info "Calling new thread"
+    Thread.new do 
+      while (result.next_page_token.present?)
+        result = service.list_user_messages(user_id, page_token: next_page_token, label_ids: [label_id], q: search_string)
+        
+        donation_count += parse_result(service,user_id, result)
+        puts "Donation count of #{donation_count}"
+        puts "Next page of #{result.next_page_token}"
       end
+      processors_check_donation = Processor.where("check_donation_string is not null")
+      puts "PROCESSOR CHECK DONATION OF #{processors_check_donation}"
+      for processor in processors_check_donation
+        search_string = processor.check_donation_string + "from:" + processor.domain
+        result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
+        puts "Result of #{result}"
+        donation_count += parse_result(service,user_id, result)
+        puts "Donation count of #{donation_count}"
+        puts "Next page of #{result.next_page_token}"
+      end
+      logger.info "Ending thread"
+      ActiveRecord::Base.connection.close  
+      logger.info "Connection is closed"
     end
 
     #watch_request = Google::Apis::GmailV1::WatchRequest.new
