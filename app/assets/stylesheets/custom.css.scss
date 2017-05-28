@@ -150,14 +150,18 @@ p {
   display: block;
 }
 
+.placeholder h4 {
+  padding-bottom: 5px;
+}
+
 .edit_user {
   padding-top: 20px;
 }
 
 .edit_user span.dollar {
-    font-size: 20px;
-    display: inline;
-    padding-right: 5px;
+  font-size: 20px;
+  display: inline;
+  padding-right: 5px;
 }
 
 .edit_user input[type=text] {

@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
 	  if user && user.authenticate(params[:session][:password])
 	    session[:user_id] = user.id
 	    @user = user
-	    redirect_to '/'
+	    redirect_to donations_path
 	  else
 	    redirect_to '/login', :flash => { :error => "Invalid username/password. If you cannot remember your password, please use Forgot Password." } 
 	  end 

@@ -2,9 +2,13 @@
 <div class="preview">
   <div class="container">
     <div class="show">
-    	<p class="message">
-    		Please see below for what a sample dashboard will look like once you begin adding donations. To add donations, either email donation receipts from your email to receipts@givepro.io or enter them manually via our <%= link_to 'Donation Form', :controller => "donations", :action => "new" %>.
-    	</p>
+      <% if notice %>
+        <p id="notice" class="message"><%= notice %></p>
+      <% else %>
+      	<p class="message">
+      		Please see below for what a sample dashboard will look like once you begin adding donations. To add donations, either email donation receipts from your email to receipts@givepro.io or enter them manually via our <%= link_to 'Donation Form', :controller => "donations", :action => "new" %>.
+      	</p>
+      <% end %>
 
     	<%= render "shared/dashboard", preview: true %>
     </div>
