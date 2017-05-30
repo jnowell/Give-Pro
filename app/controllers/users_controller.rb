@@ -136,12 +136,7 @@ class UsersController < ApplicationController
 
     if donation_count > 0
       notice = 'We have scanned your email and noticed you made a few donations, so we imported them into our database.'
-      puts "Background value of #{background}"
-      if background
-        notice << 'We are continuing to search for donations, and will add any that we find. If there are any donations that have not been added, please forward the receipts to receipts@givepro.io.'
-      else
-        notice << 'If there are any donations that have not been added, please forward the receipts to receipts@givepro.io.' 
-      end
+      notice << 'We are continuing to search for donations, and will add any that we find. If there are any donations that have not been added, please forward the receipts to receipts@givepro.io.'
       redirect_to donations_path, notice: notice
     else
       redirect_to :action => 'preview'
