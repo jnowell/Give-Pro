@@ -53,12 +53,15 @@ class MailScraper
 		processor = ::Processor.find_by(domain: org_domain)
 
 		if processor
-			org_name_match = subject.scan(/#{processor.regex}/)
-			unless org_name_match.exists?
-				org_name_match = content.scan(/#{processor.regex})/)	
+			org_name_match = subject.scan(/#{processor.org_regex}/)
+			Rails.logger.info "ORG NAME MATCH OF #{org_name_match}"
+			puts "ORG NAME MATCH LENGTH OF #{org_name_match.length}"
+			if (org_name_match.length == 0)
+				org_name_match = content.encode('utf-8', :invalid => :replace, :undef => :replace, :replace => '_').scan(/#{processor.org_regex}/)
 			end
-			if org_name_match
-				org_name = org_name_match[0][0].to_s
+			puts "ORG NAME MATCH LENGTH OF #{org_name_match.length}"
+			if (org_name_match.length > 0)
+				org_name = org_name_match[0][0].to_s.strip
 			end
 		end
 
@@ -92,7 +95,7 @@ class MailScraper
 
 		unless org.present?
 			puts "No org found"
-			unless processor.present?
+			unless (processor.present? and org_name.present?)
 				return false
 			end
 		end 
@@ -115,29 +118,52 @@ class MailScraper
 			end
 		end
 
-		unless org.amount_regex.present?
-			amount_regex = '\$(\d+)\.00'
-		else
+		if (org and org.amount_regex.present?)
 			amount_regex = org.amount_regex
+		elsif (processor.present? and processor.amount_regex.present?)
+			amount_regex = processor.amount_regex
+		else
+			amount_regex = '\$([\d,]+(\.\d{2})?)\s(?!(goal|million|billion|trillion))'
 		end
 
 		puts "AMOUNT REGEX of "+amount_regex
 
 		amount_match = content.scan(/#{amount_regex}/)
 
-		if (amount_match.length > 1 or amount_match.length == 0)
-			puts 'Unable to parse amount using Regex'
+		puts "AMOUNT MATCH OF #{amount_match}"
+
+		if (amount_match.length == 0)
+			puts 'Unable to find amount using Regex'
 			send_no_amount_email(content,org)
 			return false
 		end
 
-		puts "AMOUNT MATCH OF #{amount_match}"
+		amount_num = amount_match[0][0].gsub(/,/, '').to_f
 
-		amount_num = amount_match[0][0].to_f
+		if (amount_match.length > 1)
+			for match in amount_match
+				puts "MATCH OF #{match}"
+				#sometimes email just outputs same amount multiple times. This is fine.
+				if (match[0].gsub(/,/, '').to_f != amount_num)
+					puts 'Unable to parse amount using Regex'
+					send_no_amount_email(content,org)
+					return false
+				end
+			end
+		end
+
+		#add an upper limit of 50K just to cut down on false positives
+		unless (amount_num > 0 && amount_num < 50000)
+			puts "Invalid amount"
+			send_no_amount_email(content,org)
+			return false
+		end
 
 		puts "AMOUNT NUM OF #{amount_num}"
 		if org
 			non_profit_string = org.alias
+		elsif org_name
+			non_profit_string = org_name
 		elsif processor
 			non_profit_string = processor.name
 		end
@@ -150,9 +176,9 @@ class MailScraper
 
 		if donation.save
 			puts "Donation created with ID #{donation.id}"
-			if org.homepage.blank?
+			#if org.homepage.blank?
 				#find_non_profit_url(org)
-			end
+			#end
 			return true
 		else
 			puts "Error saving donation"
@@ -215,7 +241,7 @@ class MailScraper
 		
 		
 		ses.send_email(
-	            :to        => ['jrnowell@gmail.com'],
+	            :to        => ['charityemailtest@gmail.com'],
 	            :source    => 'postmaster@givepro.io',
 	            :subject   => 'Script Error: Unable to Determine Amount',
 	            :html_body => intro_text + "<br/>"+CGI.unescape_html(email_content)
