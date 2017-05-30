@@ -3,8 +3,10 @@
 <div class="donations">
   <div class="container">
     <div class="show">
-
-      <p id="notice" class="message"><%= notice %></p>
+  
+      <% if notice %>
+        <p id="notice" class="message"><%= notice %></p>
+      <% end %>
 
       <% if @donations.empty? && !notice %>
         <p class="message">
