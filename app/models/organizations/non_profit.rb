@@ -1,0 +1,3 @@
+class NonProfit < Organization
+	
+end
