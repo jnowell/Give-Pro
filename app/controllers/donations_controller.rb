@@ -1,7 +1,7 @@
 class DonationsController < ApplicationController
   before_action :require_user, except: [:preview, :read_receipt]
   before_action :set_donation, only: [:show, :edit, :update, :destroy]
-  autocomplete :non_profit, :alias, :"data-autocomplete-label" => "No results found."
+  autocomplete :organization, :alias, :"data-autocomplete-label" => "No results found."
   
 
   # GET /donations
@@ -44,11 +44,11 @@ class DonationsController < ApplicationController
   # POST /donations
   # POST /donations.json
   def create
-    if params[:non_profit_id].present?
-      non_profit = NonProfit.find(params[:non_profit_id])
+    if params[:organization_id].present?
+      organization = Organization.find(params[:organization_id])
       deductible = (non_profit.exemption_code > 0)
     end
-    @donation = Donation.new(donation_params.merge(:User => @current_user, :NonProfit => non_profit, :deductible => deductible, :non_profit_string => params[:donation][:non_profit_string]))
+    @donation = Donation.new(donation_params.merge(:User => @current_user, :Organization => organization, :deductible => deductible, :organization_string => params[:donation][:organization_string]))
 
     respond_to do |format|
       if @donation.save
@@ -64,16 +64,16 @@ class DonationsController < ApplicationController
   # PATCH/PUT /donations/1
   # PATCH/PUT /donations/1.json
   def update
-    puts "Non Profit String of "+params[:donation][:non_profit_string]
-    if params[:non_profit_id].present?
-      non_profit = NonProfit.find(params[:non_profit_id])
-      deductible = (non_profit.exemption_code > 0)
+    puts "Organization String of "+params[:donation][:organization_string]
+    if params[:organization_id].present?
+      organization = Organization.find(params[:organization_id])
+      deductible = (organization.exemption_code > 0)
     else 
-      non_profit = nil
+      organization = nil
       deductible = false
     end
     respond_to do |format|
-      if @donation.update(donation_params.merge(:NonProfit => non_profit, :deductible => deductible, :non_profit_string => params[:donation][:non_profit_string]))
+      if @donation.update(donation_params.merge(:Organization => organization, :deductible => deductible, :organization_string => params[:donation][:organization_string]))
         format.html { redirect_to donations_url, notice: 'Donation was successfully updated.' }
         format.json { render :show, status: :ok, location: @donation }
       else
@@ -133,6 +133,6 @@ class DonationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def donation_params
-      params.require(:donation).permit(:amount, :donation_date, :recurring, :matching, :User_id, :non_profit_id, :NonProfit_id)
+      params.require(:donation).permit(:amount, :donation_date, :recurring, :matching, :User_id, :organization_id, :Organization_id)
     end
 end
