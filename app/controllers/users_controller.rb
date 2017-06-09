@@ -84,9 +84,9 @@ class UsersController < ApplicationController
 
     processor_string = ""
     for processor in processors
-      unless (processor.domain.end_with? ".org" or processor.check_donation_string.present?)
+      unless (processor.domain_name.end_with? ".org" or processor.check_donation_string.present?)
         processor_string << "|"
-        processor_string << processor.domain
+        processor_string << processor.domain_name
       end
     end
 
@@ -98,10 +98,12 @@ class UsersController < ApplicationController
     donation_count = 0
     next_page_token = nil
     label_id = 'CATEGORY_UPDATES'
-    search_string = "subject:(thank|receipt|contribution|donation) from:(*.org#{processor_string})"
+    #label_id = 'INBOX'
+    search_string = "subject:(thank|thanks|receipt|contribution|donation) from:(*.org#{processor_string})"
+    #search_string = "subject:(thank|thanks|receipt|contribution|donation) from:pih.org"
     result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
     donation_count = parse_result(service,user_id, result)
-    #search_string = 'subject:(thank|receipt|contribution|donation) from:globalgiving.org")'
+    
     puts "Result of #{result}"
     logger.info "Calling new thread"
     Thread.new do 
@@ -116,9 +118,9 @@ class UsersController < ApplicationController
       puts "PROCESSOR CHECK DONATION OF #{processors_check_donation}"
       for processor in processors_check_donation
         search_string = processor.check_donation_string + "from:" + processor.domain
-        result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
+        #result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
         puts "Result of #{result}"
-        donation_count += parse_result(service,user_id, result)
+        #donation_count += parse_result(service,user_id, result)
         puts "Donation count of #{donation_count}"
         puts "Next page of #{result.next_page_token}"
       end

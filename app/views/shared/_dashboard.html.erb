@@ -26,10 +26,8 @@
       <div class="card" style="width:25rem;">
         <% if donation.has_image %>
           <div class="image">
-            <% if donation.NonProfit %>
-              <%= image_tag(donation.NonProfit.image.thumb.url, class: "card-img-top", alt: donation.NonProfit.alias) %>
-            <% elsif donation.Processor %>
-              <%= image_tag(donation.Processor.image.thumb.url, class: "card-img-top", alt: donation.Processor.name) %>
+            <% if donation.Organization.present? %>
+              <%= image_tag(donation.Organization.image.thumb.url, class: "card-img-top", alt: donation.Organization.alias) %>
             <% end %>
           </div>
         <% end %>
@@ -39,7 +37,7 @@
           <% else %>
             <h4 class="card-title noimage">
           <% end %>
-            <%= donation.non_profit_string %>
+            <%= donation.organization_string %>
           </h4>
           <div class="donation-data">
             <p class="card-text amount"><%= number_to_currency(donation.amount) %></p>

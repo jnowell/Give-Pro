@@ -18,16 +18,16 @@
     <%= f.number_field(:amount, precision: 2, step: :any)  %>
   </div>
   <div class="field">
-  <% if @donation.errors.any? and @donation.errors[:non_profit_string] %>
+  <% if @donation.errors.any? and @donation.errors[:organization_string] %>
     <div class="field_with_errors">
-      <%= f.label :non_profit_string, value: "Organization" %>
+      <%= f.label :organization_string, value: "Organization" %>
     </div>
     <div class="field_with_errors">
-      <%= f.autocomplete_field :non_profit_string, autocomplete_non_profit_alias_donations_path, :id_element => '#non_profit_id' %>
+      <%= f.autocomplete_field :organization_string, autocomplete_organization_alias_donations_path, :id_element => '#organization_id' %>
     </div>
   <% else %>
-    <%= f.label :non_profit_string, value: "Organization" %>
-    <%= f.autocomplete_field :non_profit_string, autocomplete_non_profit_alias_donations_path, :id_element => '#non_profit_id' %>
+    <%= f.label :organization_string, value: "Organization" %>
+    <%= f.autocomplete_field :organization_string, autocomplete_organization_alias_donations_path, :id_element => '#organization_id' %>
   <% end %>
   </div>
   <div class="field">

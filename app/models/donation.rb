@@ -1,12 +1,11 @@
 class Donation < ActiveRecord::Base
   belongs_to :User
-  belongs_to :NonProfit
-  belongs_to :Processor
+  belongs_to :Organization
   validates :amount, presence: true
   validates :donation_date, presence: true
-  validates :non_profit_string, presence: true
+  validates :organization_string, presence: true
 
   def has_image
-	return ((!(self.NonProfit.nil?) and (self.NonProfit.image.present?)) or (!(self.Processor.nil?) and (self.Processor.image.present?)))
+	return (!(self.Organization.nil?) and (self.Organization.image.present?))
   end
 end
