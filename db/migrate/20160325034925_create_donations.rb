@@ -6,10 +6,10 @@ class CreateDonations < ActiveRecord::Migration
       t.boolean :recurring
       t.boolean :matching
       t.references :User
-      t.references :NonProfit
+      t.references :Organization
       t.timestamps null: false
     end
     add_foreign_key :donations, :users
-    add_foreign_key :donations, :NonProfit
+    add_foreign_key :donations, :Organization
   end
 end
