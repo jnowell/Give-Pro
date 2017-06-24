@@ -5,7 +5,7 @@ class CreateDonations < ActiveRecord::Migration
       t.date :donation_date
       t.boolean :recurring
       t.boolean :matching
-      t.references :User, index: true
+      t.references :User
       t.references :NonProfit, index: true, foreign_key: true
 
       t.timestamps null: false
