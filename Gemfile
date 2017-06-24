@@ -23,6 +23,8 @@ gem 'google-search'
 gem 'carrierwave', '~> 0.10.0'
 gem 'mini_magick', '~> 4.3'
 
+gem 'mysql2'
+
 gem 'searchbing'
 
 gem 'omniauth', '~> 1.2.2'
