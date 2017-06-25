@@ -10,6 +10,5 @@ class CreateDonations < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_foreign_key :donations, :users
-    add_foreign_key :donations, :Organization
   end
 end
