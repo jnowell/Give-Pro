@@ -1,14 +1,14 @@
-class NonProfitsController < ApplicationController
-  before_action :set_non_profit, only: [:show, :edit, :update, :destroy]
+class OrganizationsController < ApplicationController
+  before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :check_admin
 
   # GET /non_profits
   # GET /non_profits.json
   def index
     if params[:name]
-      @non_profits = NonProfit.where("alias LIKE ?", "#{params[:name]}%")
+      @organizations = Organization.where("alias LIKE ?", "#{params[:name]}%")
     else
-      @non_profits = NonProfit.all
+      @organizations = Organization.all
     end
   end
 
@@ -19,7 +19,7 @@ class NonProfitsController < ApplicationController
 
   # GET /non_profits/new
   def new
-    @non_profit = NonProfit.new
+    @organization = Organization.new
   end
 
   # GET /non_profits/1/edit
@@ -29,15 +29,15 @@ class NonProfitsController < ApplicationController
   # POST /non_profits
   # POST /non_profits.json
   def create
-    @non_profit = NonProfit.new(non_profit_params)
+    @organization = Organization.new(organization_params)
 
     respond_to do |format|
       if @non_profit.save
-        format.html { redirect_to @non_profit, notice: 'Non profit was successfully created.' }
-        format.json { render :show, status: :created, location: @non_profit }
+        format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
+        format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
-        format.json { render json: @non_profit.errors, status: :unprocessable_entity }
+        format.json { render json: @organization.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -46,12 +46,12 @@ class NonProfitsController < ApplicationController
   # PATCH/PUT /non_profits/1.json
   def update
     respond_to do |format|
-      if @non_profit.update(non_profit_params)
-        format.html { redirect_to @non_profit, notice: 'Non profit was successfully updated.' }
-        format.json { render :show, status: :ok, location: @non_profit }
+      if @organization.update(organization_params)
+        format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
+        format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit }
-        format.json { render json: @non_profit.errors, status: :unprocessable_entity }
+        format.json { render json: @organization.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -61,15 +61,15 @@ class NonProfitsController < ApplicationController
   def destroy
     @non_profit.destroy
     respond_to do |format|
-      format.html { redirect_to non_profits_url, notice: 'Non profit was successfully destroyed.' }
+      format.html { redirect_to organization_url, notice: 'Organization was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_non_profit
-      @non_profit = NonProfit.find(params[:id])
+    def set_organization
+      @organization = Organization.find(params[:id])
     end
 
     def check_admin
@@ -80,7 +80,7 @@ class NonProfitsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def non_profit_params
-      params.require(:non_profit).permit(:ein, :name, :alias, :tax_exempt, :domain_name, :amount_regex, :status_code, :donation_page_url, :image, :remove_image, :homepage)
+    def organization_params
+      params.require(:organization).permit(:ein, :name, :alias, :tax_exempt, :domain_name, :amount_regex, :status_code, :donation_page_url, :image, :remove_image, :homepage, :type, :check_donation_string, :org_regex)
     end
 end
