@@ -32,7 +32,7 @@ class OrganizationsController < ApplicationController
     @organization = Organization.new(organization_params)
 
     respond_to do |format|
-      if @non_profit.save
+      if @organization.save
         format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
         format.json { render :show, status: :created, location: @organization }
       else
@@ -59,7 +59,7 @@ class OrganizationsController < ApplicationController
   # DELETE /non_profits/1
   # DELETE /non_profits/1.json
   def destroy
-    @non_profit.destroy
+    @organization.destroy
     respond_to do |format|
       format.html { redirect_to organization_url, notice: 'Organization was successfully destroyed.' }
       format.json { head :no_content }
