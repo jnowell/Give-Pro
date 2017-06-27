@@ -6,86 +6,86 @@
 
       <p>
         <strong>Ein:</strong>
-        <%= @non_profit.ein %>
+        <%= @organization.ein %>
       </p>
 
       <p>
         <strong>Name:</strong>
-        <%= @non_profit.name %>
+        <%= @organization.name %>
       </p>
 
       <p>
         <strong>Alias:</strong>
-        <%= @non_profit.alias %>
+        <%= @organization.alias %>
       </p>
 
       <p>
         <strong>Address:</strong>
-        <%= @non_profit.address %>
+        <%= @organization.address %>
       </p>
 
       <p>
         <strong>City:</strong>
-        <%= @non_profit.city %>
+        <%= @organization.city %>
       </p>
 
       <p>
         <strong>State:</strong>
-        <%= @non_profit.state %>
+        <%= @organization.state %>
       </p>
 
       <p>
         <strong>Zip:</strong>
-        <%= @non_profit.zip %>
+        <%= @organization.zip %>
       </p>
 
       <p>
         <strong>Image:</strong>
-        <%= image_tag @non_profit.image.thumb.url %>
+        <%= image_tag @organization.image.thumb.url %>
       </p>
 
       <p>
         <strong>Subsection:</strong>
-        <%= @non_profit.subsection %>
+        <%= @organization.subsection %>
       </p>
 
       <p>
         <strong>Classification:</strong>
-        <%= @non_profit.classification %>
+        <%= @organization.classification %>
       </p>
 
       <p>
         <strong>Ruling Date:</strong>
-        <%= @non_profit.ruling_date %>
+        <%= @organization.ruling_date %>
       </p>
 
       <p>
         <strong>Domain Name:</strong>
-        <%= @non_profit.domain_name %>
+        <%= @organization.domain_name %>
       </p>
 
       <p>
         <strong>Exemption Code:</strong>
-        <%= @non_profit.exemption_code %>
+        <%= @organization.exemption_code %>
       </p>
 
       <p>
         <strong>Foundation Code:</strong>
-        <%= @non_profit.foundation_code %>
+        <%= @organization.foundation_code %>
       </p>
 
       <p>
         <strong>Donation page url:</strong>
-        <%= @non_profit.donation_page_url %>
+        <%= @organization.donation_page_url %>
       </p>
 
       <p>
         <strong>Image URL:</strong>
-        <%= @non_profit.image_url %>
+        <%= @organization.image_url %>
       </p>
 
-      <%= link_to 'Edit', edit_non_profit_path(@non_profit) %> |
-      <%= link_to 'Back', non_profits_path %>
+      <%= link_to 'Edit', edit_organization_path(@organization) %> |
+      <%= link_to 'Back', organizations_path %>
     </div>
   </div>
 </div>
