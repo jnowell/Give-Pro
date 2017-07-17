@@ -50,19 +50,24 @@ class MailScraper
 	def self.parse_email(content, subject, from_email, to_email, date)
 		org_domain = from_email.split("@").last
 
-		processor = ::Processor.find_by(domain: org_domain)
+		organization = ::Organization.find_by(domain_name: org_domain)
 
-		if processor
-			org_name_match = subject.scan(/#{processor.org_regex}/)
+		if (organization)
+			puts "Organization of #{organization} and inspect #{organization.inspect}"
+		end
+
+		if (organization && organization.type == 'Processor' ) 
+			org_name_match = subject.scan(/#{organization.org_regex}/)
 			Rails.logger.info "ORG NAME MATCH OF #{org_name_match}"
 			puts "ORG NAME MATCH LENGTH OF #{org_name_match.length}"
 			if (org_name_match.length == 0)
-				org_name_match = content.encode('utf-8', :invalid => :replace, :undef => :replace, :replace => '_').scan(/#{processor.org_regex}/)
+				org_name_match = content.encode('utf-8', :invalid => :replace, :undef => :replace, :replace => '_').scan(/#{organization.org_regex}/)
 			end
 			puts "ORG NAME MATCH LENGTH OF #{org_name_match.length}"
 			if (org_name_match.length > 0)
 				org_name = org_name_match[0][0].to_s.strip
 			end
+			puts "Org domain of #{org_domain} and org name of #{org_name} and org.name of #{organization.name} and type #{organization.type}"
 		end
 
 		
@@ -81,23 +86,23 @@ class MailScraper
 		#	puts 'ORG NAME OF '+ org_name_match[0][0].to_s
 		#end
 		
-		
-
 		puts "Org domain of #{org_domain} and org name of #{org_name}"
 
+
 		if org_name
-			org = ::NonProfit.find_by(name: org_name)
-		elsif !org_domain.empty?
-			org = ::NonProfit.find_by(domain_name: org_domain)
+			org = ::Organization.find_by(name: org_name)
 		end
 
-		puts "Org of #{org}"
+		if org
+			puts "Org #{org}"
+			organization = org
+		end
 
-		unless org.present?
+		puts "Org of #{organization}"
+
+		unless organization.present?
 			puts "No org found"
-			unless (processor.present? and org_name.present?)
-				return false
-			end
+			return false
 		end 
 
 		user = ::User.find_by(email: to_email)
@@ -118,10 +123,8 @@ class MailScraper
 			end
 		end
 
-		if (org and org.amount_regex.present?)
-			amount_regex = org.amount_regex
-		elsif (processor.present? and processor.amount_regex.present?)
-			amount_regex = processor.amount_regex
+		if (organization and organization.amount_regex.present?)
+			amount_regex = organization.amount_regex
 		else
 			amount_regex = '\$([\d,]+(\.\d{2})?)\s(?!(goal|million|billion|trillion))'
 		end
@@ -160,15 +163,8 @@ class MailScraper
 		end
 
 		puts "AMOUNT NUM OF #{amount_num}"
-		if org
-			non_profit_string = org.alias
-		elsif org_name
-			non_profit_string = org_name
-		elsif processor
-			non_profit_string = processor.name
-		end
 		
-		donation = Donation.new(:amount => amount_num, :donation_date => date, :non_profit_string => non_profit_string, :NonProfit => org, :User => user, :Processor => processor)
+		donation = Donation.new(:amount => amount_num, :donation_date => date, :organization_string => organization.alias, :Organization => organization, :User => user)
 
 		unless donation.valid?
 			puts "Donation not valid"
