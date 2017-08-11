@@ -107,8 +107,8 @@ class UsersController < ApplicationController
         next_page_token = nil
         label_id = 'CATEGORY_UPDATES'
         #label_id = 'INBOX'
-        #search_string = "subject:(thank|thanks|receipt|contribution|donation) from:(*.org#{processor_string})"
-        search_string = "subject:(thank|thanks|receipt|contribution|donation) from:actblue.com"
+        search_string = "subject:(thank|thanks|receipt|contribution|donation) from:(*.org#{processor_string})"
+        #search_string = "subject:(thank|thanks|receipt|contribution|donation) from:actblue.com"
 
         result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
         logger.info "Result of #{result}"
