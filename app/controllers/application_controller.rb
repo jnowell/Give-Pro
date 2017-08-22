@@ -23,7 +23,8 @@ class ApplicationController < ActionController::Base
     @date_total = Hash.new
 
     unless @donations.empty?
-      min_month = [@donations.last.donation_date.at_beginning_of_month,Date.today.at_beginning_of_month.prev_year.next_month].min
+      min_month = [@donations.first.donation_date.at_beginning_of_month,Date.today.at_beginning_of_month.prev_year.next_month].min
+
       cur_month = Date.today.at_beginning_of_month
 
       #populate month graph before beginning...necessary because hash iterates by order of insertion
@@ -53,11 +54,15 @@ class ApplicationController < ActionController::Base
         end
       end
 
-      month = donation.donation_date.at_beginning_of_month.strftime('%Q')
-      if @date_total[month]
-        @date_total[month] += donation.amount
-      else
-        @date_total[month] = donation.amount
+      donation_month =  donation.donation_date.at_beginning_of_month
+
+      if donation_month > 1.year.ago
+        month = donation_month.strftime('%Q')
+        if @date_total[month]
+          @date_total[month] += donation.amount
+        else
+          @date_total[month] = donation.amount
+        end
       end
     end
 
