@@ -52,9 +52,12 @@ class MailScraper
 
 		organization = ::Organization.find_by(domain_name: org_domain)
 
-		if (organization)
+		if organization
 			puts "Organization of #{organization} and inspect #{organization.inspect}"
-		end
+		else
+			puts "No org found"
+			return false
+		end 
 
 		if (organization && organization.type == 'Processor' ) 
 			org_name_match = subject.scan(/#{organization.org_regex}/)
@@ -91,19 +94,21 @@ class MailScraper
 
 		if org_name
 			org = ::Organization.find_by(name: org_name)
+		else
+			org_name = organization.alias
 		end
+
+		puts "Org domain of #{org_domain} and org name of #{org_name}"
+
 
 		if org
 			puts "Org #{org}"
 			organization = org
 		end
 
-		puts "Org of #{organization}"
 
-		unless organization.present?
-			puts "No org found"
-			return false
-		end 
+
+		puts "Org of #{organization}"
 
 		user = ::User.find_by(email: to_email)
 
@@ -126,12 +131,12 @@ class MailScraper
 		if (organization and organization.amount_regex.present?)
 			amount_regex = organization.amount_regex
 		else
-			amount_regex = '\$([\d,]+(\.\d{2})?)\s(?!(goal|million|billion|trillion))'
+			amount_regex = '\$([\d,]+(\.\d{2})?)\s+(?!(goal|million|billion|trillion))'
 		end
 
 		puts "AMOUNT REGEX of "+amount_regex
 
-		amount_match = content.scan(/#{amount_regex}/)
+		amount_match = content.scan(/#{amount_regex}/i)
 
 		puts "AMOUNT MATCH OF #{amount_match}"
 
@@ -164,7 +169,7 @@ class MailScraper
 
 		puts "AMOUNT NUM OF #{amount_num}"
 		
-		donation = Donation.new(:amount => amount_num, :donation_date => date, :organization_string => organization.alias, :Organization => organization, :User => user)
+		donation = Donation.new(:amount => amount_num, :donation_date => date, :organization_string => org_name, :Organization => organization, :User => user)
 
 		unless donation.valid?
 			puts "Donation not valid"

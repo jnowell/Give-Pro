@@ -88,6 +88,7 @@ class UsersController < ApplicationController
     logger.info "Calling new thread"
     Thread.new do 
       ActiveRecord::Base.connection_pool.with_connection do
+
         processors = ::Processor.all
 
         processor_string = ""
@@ -108,7 +109,7 @@ class UsersController < ApplicationController
         label_id = 'CATEGORY_UPDATES'
         #label_id = 'INBOX'
         search_string = "subject:(thank|thanks|receipt|contribution|donation) from:(*.org#{processor_string})"
-        #search_string = "subject:(thank|thanks|receipt|contribution|donation) from:actblue.com"
+        #search_string = "subject:(has been successfully funded!) from:kickstarter.com"
 
         result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
         logger.info "Result of #{result}"
@@ -120,7 +121,7 @@ class UsersController < ApplicationController
           puts "Donation count of #{donation_count}"
           puts "Next page of #{result.next_page_token}"
         end
-        processors_check_donation = Processor.where("check_donation_string is not null")
+        processors_check_donation = Processor.where.not(check_donation_string: [nil, ''])
         puts "PROCESSOR CHECK DONATION OF #{processors_check_donation}"
         for processor in processors_check_donation
           search_string = processor.check_donation_string + "from:" + processor.domain_name
@@ -252,7 +253,7 @@ class UsersController < ApplicationController
           end
           if header.name == "From"
             #puts "HEADER VALUE OF #{header.value}"
-            from_match = header.value.scan(/[\s\w]*<?([\w\-.]+@[\w.]+\.\w{3})>?/)
+            from_match = header.value.scan(/[\s\w]*<?([\w\-.]+@[\w\-.]+\.\w{3})>?/)
             #from_match = from_regex.match(stripped_content)
             if from_match.length > 1
               puts 'More than 1 match for From regex'
