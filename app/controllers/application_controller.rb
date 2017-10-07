@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
         end
       end
 
-      if donation.Organization.present?
+      if donation.Organization.present? && donation.Organization.subsection
         if sub_count[donation.Organization.subsection]
           sub_count[donation.Organization.subsection] += donation.amount
         else
