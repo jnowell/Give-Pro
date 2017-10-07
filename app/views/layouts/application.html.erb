@@ -24,7 +24,7 @@
         <div class="nav pull-right">
         	
         	<ul> 
-        	  <li><a href="#" onClick="alert('Hello World!')">Share This Page</a></li>
+        	  <li><a href="#" onClick="clickShare();">Share This Page</a></li>
 	          <% if current_user %> 
 			    <li><%= current_user.email %></li> 
 			    <li><%= link_to "Log out", logout_path, method: "delete" %></li> 
@@ -49,6 +49,11 @@
 
 	  ga('create', 'UA-76147314-1', 'auto');
 	  ga('send', 'pageview');
+
+	  function clickShare() {
+	  	ga('send', 'event', 'Social', 'Click', 'Share');
+	  	alert('We are still working on this page. Try again soon!');
+	  }
 
   	</script>
 
