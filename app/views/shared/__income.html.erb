@@ -27,7 +27,7 @@
 		</div>
 	</div>
 <% unless @dashboard_user.income.presence %>
-	<%= form_for @dashboard_user, url: user_save_income_path(@dashboard_user), remote: true do |f| %>
+	<%= form_for @dashboard_user, :html => {:id => "goal_form"}, url: user_save_income_path(@dashboard_user), remote: true do |f| %>
 	  <h4>Do you give as much as the average American?</h4>
 	  <%= hidden_field_tag("id",@dashboard_user.id) %>
 	  <%= hidden_field_tag("annual_sum",@annual_sum) %>

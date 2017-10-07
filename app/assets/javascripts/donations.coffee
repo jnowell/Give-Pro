@@ -5,6 +5,7 @@
 # //$(".donation-thermometer").html("<%= raw render 'shared/income.html.erb' %>")
 
 $(document).ready ->
+  $("#goal_form").on 'submit', -> calculateGoal()
   $(".edit_user").on("ajax:success", (e, data, status, xhr) ->  
     $(".donation-thermometer").html(data)
     $(".donation-thermometer").show()
@@ -14,3 +15,7 @@ $(document).ready ->
   ).on "ajax:error", (e, xhr, status, error) ->
     #Flesh this out a little
     $(".edit_user").hide()
+
+calculateGoal = ->
+  	ga('send', 'event', 'Donations', 'Submit', 'Calculate Goal')
+  	console.log 'All good'
