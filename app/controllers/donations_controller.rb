@@ -84,7 +84,9 @@ class DonationsController < ApplicationController
   end
 
   def tax_receipt
-    @donations = Donation.where("user_id = ?", session[:user_id]).where("cast(strftime('%Y', donation_date) as int) = ?",params[:year]).where("deductible = ?", true)
+    @donations = Donation.where("user_id = ?", session[:user_id]).where("extract(month from donation_date) = ?",params[:year]).where("deductible = ?", true)
+    #use below locally. Above works with MySQL
+    #@donations = Donation.where("user_id = ?", session[:user_id]).where("extract(strftime('%Y', donation_date) as int) = ?",params[:year]).where("deductible = ?", true)
 
     @year = params[:year]
     @total_sum = 0

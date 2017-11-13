@@ -84,38 +84,39 @@ class UsersController < ApplicationController
 
     puts "Logged In User of #{logged_in_user}"
     
-    
+    processors = ::Processor.all
+
+    processor_string = ""
+    for processor in processors
+      unless (processor.domain_name.end_with? ".org" or processor.check_donation_string.present?)
+        processor_string << "|"
+        processor_string << processor.domain_name
+      end
+    end
+
+    puts "PROCESSOR STRING OF #{processor_string}"
+
+    # Show the user's labels
+    user_id = 'me'
+   
+    donation_count = 0
+    next_page_token = nil
+    label_id = 'INBOX, CATEGORY_UPDATES'
+    #label_id = 'INBOX'
+    search_string = "subject:(thank|thanks|receipt|contribution|donation) from:networkforgood.org"
+    #search_string = "subject:(thank|thanks|receipt|contribution|donation) from:(actblue.com)"
+
+    result = service.list_user_messages(user_id,  max_results: 50, q: search_string)
+    #result = service.list_user_messages(user_id,  label_ids: ['CATEGORY_UPDATES'], max_results: 50, q: search_string)
+
+    logger.info "Result of #{result}"
+    donation_count = parse_result(service,user_id, result, logged_in_user.email)
     logger.info "Calling new thread"
     Thread.new do 
       ActiveRecord::Base.connection_pool.with_connection do
 
-        processors = ::Processor.all
-
-        processor_string = ""
-        for processor in processors
-          unless (processor.domain_name.end_with? ".org" or processor.check_donation_string.present?)
-            processor_string << "|"
-            processor_string << processor.domain_name
-          end
-        end
-
-        puts "PROCESSOR STRING OF #{processor_string}"
-
-        # Show the user's labels
-        user_id = 'me'
-       
-        donation_count = 0
-        next_page_token = nil
-        label_id = 'CATEGORY_UPDATES'
-        #label_id = 'INBOX'
-        search_string = "subject:(thank|thanks|receipt|contribution|donation) from:(*.org#{processor_string})"
-        #search_string = "subject:(has been successfully funded!) from:kickstarter.com"
-
-        result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
-        logger.info "Result of #{result}"
-        donation_count = parse_result(service,user_id, result, logged_in_user.email)
         while (result.next_page_token.present?)
-          result = service.list_user_messages(user_id, page_token: next_page_token, label_ids: [label_id], q: search_string)
+          result = service.list_user_messages(user_id, page_token: next_page_token, label_ids: ['CATEGORY_UPDATES'], q: search_string)
           
           donation_count += parse_result(service,user_id, result, logged_in_user.email)
           puts "Donation count of #{donation_count}"
@@ -124,11 +125,11 @@ class UsersController < ApplicationController
         processors_check_donation = Processor.where.not(check_donation_string: [nil, ''])
         puts "PROCESSOR CHECK DONATION OF #{processors_check_donation}"
         for processor in processors_check_donation
-          search_string = processor.check_donation_string + "from:" + processor.domain_name
-          result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
-          puts "Result of #{result}"
-          donation_count += parse_result(service,user_id, result, logged_in_user.email)
-          puts "Donation count of #{donation_count}"
+          #search_string = processor.check_donation_string + "from:" + processor.domain_name
+          #result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
+          #puts "Result of #{result}"
+          #donation_count += parse_result(service,user_id, result, logged_in_user.email)
+          #puts "Donation count of #{donation_count}"
         end
         
         puts "USER EMAIL OF #{logged_in_user.email}"
@@ -149,7 +150,7 @@ class UsersController < ApplicationController
     #response = service.watch_user(user_id, watch_request)
     #puts response.inspect
 
-    if false
+    if donation_count > 0
       notice = 'We have scanned your email and noticed you made a few donations, so we imported them into our database.'
       notice << 'We are continuing to search for donations, and will add any that we find. If there are any donations that have not been added, please forward the receipts to receipts@givepro.io.'
       redirect_to donations_path, notice: notice
@@ -268,8 +269,8 @@ class UsersController < ApplicationController
               #Tue, 21 Mar 2017 17:40:16 +0000
               date = Date.strptime(header.value,'%a, %d %b %Y %k:%M:%S %z')
             rescue ArgumentError
-              #puts "ERROR PARSING DATE #{header.value}"
-              #date = Date.strptime(header.value,'%a, %b %d, %Y at %l:%M %p')
+              puts "ERROR PARSING DATE #{header.value}"
+              date = Date.strptime(header.value,'%d %b %Y %k:%M:%S %z')
             end
           end
         end
@@ -291,8 +292,15 @@ class UsersController < ApplicationController
   def send_donation_import_email(donation_count,user_email)
     #puts "AWS KEY id of "+.to_s
     #intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex and then edit the Regex field in <a href=\"http://www.givepro.io/non_profits/#{org.id}/edit\">this form</a> and click 'Submit'."
-    intro_text = "We were able to import #{donation_count} donations into our system. Please check your <a href='http://www.givepro.io/donations'>Donation Gallery</a> to see which donations we found. If there are any receipts you have that we might have missed, please forward them to receipts@givepro.io" 
-
+    intro_text = "<p>Hello!</p>"
+    intro_text += "<p>We're so excited you've signed up for GivePro. We were able to import #{donation_count} donations into our system, and we've added your receipts into your very own <a href='http://www.givepro.io/donations'>Giving Gallery</a> - check it out!</p>"
+    intro_text += "<p>We believe that your generosity exceeds 501(c)3 status, so we'll include your crowdfunding and political contributions, too.</p>"
+    intro_text += "<p>You'll see donations you've made to larger organizations right away, but contributions to smaller groups may take longer as we learn about them.</p>"
+    intro_text += "<p>Something missing? You can always directly enter a donation <a href='http://www.givepro.io/donations/new'>here</a>, whether or not you have an email receipt.</p>"
+    intro_text += "<p>We take your privacy extremely seriously - your email is never shared with anyone.</p>"
+    intro_text += "<p>Happy giving!</p>"
+    intro_text += "- The GivePro Team<br/>"
+    intro_text += "<a href='http://www.givepro.io'>http://www.givepro.io</a>"
 
 
     ses = AWS::SES::Base.new(
@@ -305,7 +313,7 @@ class UsersController < ApplicationController
     ses.send_email(
               :to        => user_email,
               :source    => 'postmaster@givepro.io',
-              :subject   => 'Email Import Complete',
+              :subject   => 'Take a look at the good you\'ve done',
               :html_body => intro_text
     )
     
