@@ -55,7 +55,7 @@ class MailScraper
 		if organization
 			puts "Organization of #{organization} and inspect #{organization.inspect}"
 		else
-			puts "No org found"
+			Rails.logger.info "No organization found for from_email #{from_email}"
 			return false
 		end 
 
@@ -128,17 +128,26 @@ class MailScraper
 			end
 		end
 
-		if (organization and organization.amount_regex.present?)
-			amount_regex = organization.amount_regex
+		regexes = Array.new
+
+
+
+		if (organization and !organization.amount_regexes.empty?)
+			for regex in organization.amount_regexes
+				regexes.push(regex.regex)
+			end
 		else
-			amount_regex = '\$([\d,]+(\.\d{2})?)\s+(?!(goal|million|billion|trillion))'
+			regexes.push('\$([\d,]+(\.\d{2})?)\s+(?!(goal|million|billion|trillion))')
 		end
 
-		puts "AMOUNT REGEX of "+amount_regex
 
-		amount_match = content.scan(/#{amount_regex}/i)
+		for amount_regex in regexes
+			amount_match = content.scan(/#{amount_regex}/i)
+			puts "AMOUNT MATCH LENGTH OF #{amount_match.length}"
+			break if amount_match.length > 0
+		end
 
-		puts "AMOUNT MATCH OF #{amount_match}"
+		Rails.logger.info "AMOUNT MATCH OF #{amount_match}"
 
 		if (amount_match.length == 0)
 			puts 'Unable to find amount using Regex'
@@ -167,7 +176,7 @@ class MailScraper
 			return false
 		end
 
-		puts "AMOUNT NUM OF #{amount_num}"
+		Rails.logger.info "AMOUNT NUM OF #{amount_num} AND ORGANIZATION STRING OF #{org_name} and DATE OF #{date} AND ORGANIZATION OF #{organization}"
 		
 		donation = Donation.new(:amount => amount_num, :donation_date => date, :organization_string => org_name, :Organization => organization, :User => user)
 
@@ -232,22 +241,22 @@ class MailScraper
 	def self.send_no_amount_email(email_content,org)
 		#puts "AWS KEY id of "+.to_s
 		#intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex and then edit the Regex field in <a href=\"http://www.givepro.io/non_profits/#{org.id}/edit\">this form</a> and click 'Submit'."
-		intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex"
+		#intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex"
 
-		ses = AWS::SES::Base.new(
-	  		:access_key_id => ENV["AWS_ACCESS_KEY_ID"],
-	  		:secret_access_key => ENV["AWS_SECRET_KEY"])
+		#ses = AWS::SES::Base.new(
+	  	#	:access_key_id => ENV["AWS_ACCESS_KEY_ID"],
+	  	#	:secret_access_key => ENV["AWS_SECRET_KEY"])
 
 		#print ses.buckets
 		
 		
-		ses.send_email(
-	            :to        => ['charityemailtest@gmail.com'],
-	            :source    => 'postmaster@givepro.io',
-	            :subject   => 'Script Error: Unable to Determine Amount',
-	            :html_body => intro_text + "<br/>"+CGI.unescape_html(email_content)
-		)
-		
+		#ses.send_email(
+	    #        :to        => ['charityemailtest@gmail.com'],
+	    #        :source    => 'postmaster@givepro.io',
+	    #        :subject   => 'Script Error: Unable to Determine Amount',
+	    #        :html_body => intro_text + "<br/>"+CGI.unescape_html(email_content)
+		#)
+		Rails.logger.info "UNABLE TO PARSE AMOUNT FOR EMAIL #{email_content}"
 	end
 end
 
