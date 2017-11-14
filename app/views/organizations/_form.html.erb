@@ -1,7 +1,7 @@
 <%= form_for(@organization) do |f| %>
   <% if @organization.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@organization.errors.count, "error") %> prohibited this non_profit from being saved:</h2>
+      <h2><%= pluralize(@organization.errors.count, "error") %> prohibited this organization from being saved:</h2>
 
       <ul>
       <% @organization.errors.full_messages.each do |message| %>
@@ -66,10 +66,6 @@
     <%= f.text_field :homepage %>
   </div>
   <div class="field">
-    <%= f.label :amount_regex %><br>
-    <%= f.text_field :amount_regex %>
-  </div>
-  <div class="field">
     <%= f.label :ruling_date %><br>
     <%= f.text_field :ruling_date %>
   </div>
@@ -97,6 +93,12 @@
     <%= f.label :org_regex %><br>
     <%= f.text_field :org_regex %>
   </div>
+  <%= f.fields_for :amount_regexes, @organization.amount_regexes do |p| %>
+    <div class="field">
+      <%= p.label :regex %><br>
+      <%= p.text_field :regex %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit "Submit", class: "btn-submit" %>
   </div>
