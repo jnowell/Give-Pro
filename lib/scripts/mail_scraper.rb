@@ -240,7 +240,6 @@ class MailScraper
 
 	def self.send_no_amount_email(email_content,org)
 		#puts "AWS KEY id of "+.to_s
-		#intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex and then edit the Regex field in <a href=\"http://www.givepro.io/non_profits/#{org.id}/edit\">this form</a> and click 'Submit'."
 		#intro_text = "Our script was unable to determine the donation amount in the following email. Please find a suitable regex"
 
 		#ses = AWS::SES::Base.new(

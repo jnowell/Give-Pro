@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20171113055854) do
     t.string  "regex"
   end
 
-  add_index "amount_regexes", ["organization_id"], name: "index_amount_regexes_on_organization_id"
+  add_index "amount_regexes", ["organization_id"], name: "index_amount_regexes_on_org"
 
   create_table "donations", force: :cascade do |t|
     t.float    "amount"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20171113055854) do
     t.boolean  "admin"
   end
 
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["password_reset_token"], name: "index_users_on_password_reset_token"
 
 end

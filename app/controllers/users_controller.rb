@@ -111,35 +111,42 @@ class UsersController < ApplicationController
 
     logger.info "Result of #{result}"
     donation_count = parse_result(service,user_id, result, logged_in_user.email)
+
     logger.info "Calling new thread"
     Thread.new do 
       ActiveRecord::Base.connection_pool.with_connection do
 
         while (result.next_page_token.present?)
           result = service.list_user_messages(user_id, page_token: next_page_token, label_ids: ['CATEGORY_UPDATES'], q: search_string)
-          
-          donation_count += parse_result(service,user_id, result, logged_in_user.email)
-          puts "Donation count of #{donation_count}"
-          puts "Next page of #{result.next_page_token}"
-        end
-        processors_check_donation = Processor.where.not(check_donation_string: [nil, ''])
-        puts "PROCESSOR CHECK DONATION OF #{processors_check_donation}"
-        for processor in processors_check_donation
-          #search_string = processor.check_donation_string + "from:" + processor.domain_name
-          #result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
-          #puts "Result of #{result}"
-          #donation_count += parse_result(service,user_id, result, logged_in_user.email)
-          #puts "Donation count of #{donation_count}"
-        end
-        
-        puts "USER EMAIL OF #{logged_in_user.email}"
-        #if not this, try logged_in_user
-        send_donation_import_email(donation_count,logged_in_user.email)
+          processors = ::Processor.all
 
-        logger.info "Ending thread"
-        #ActiveRecord::Base.connection.close  
-        #ActiveRecord::Base.connection_pool.releaseconnectiond
-        logger.info "Connection is closed"
+          processor_string = ""
+          for processor in processors
+            unless (processor.domain_name.end_with? ".org" or processor.check_donation_string.present?)
+              processor_string << "|"
+              processor_string << processor.domain_name
+            end
+          end
+
+          puts "PROCESSOR STRING OF #{processor_string}"
+
+          # Show the user's labels
+          user_id = 'me'
+         
+          donation_count = 0
+          next_page_token = nil
+          label_id = 'CATEGORY_UPDATES'
+          #label_id = 'INBOX'
+          search_string = "subject:(thank|thanks|receipt|contribution|donation) from:(*.org#{processor_string})"
+          #search_string = "subject:(has been successfully funded!) from:kickstarter.com"
+
+          result = service.list_user_messages(user_id, label_ids: [label_id], q: search_string)
+          logger.info "Result of #{result}"
+          donation_count = parse_result(service,user_id, result, logged_in_user.email)
+          #ActiveRecord::Base.connection.close  
+          #ActiveRecord::Base.connection_pool.releaseconnectiond
+          logger.info "Connection is closed"
+        end
       end
     end
 
