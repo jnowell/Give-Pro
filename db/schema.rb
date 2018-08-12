@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170325154912) do
+ActiveRecord::Schema.define(version: 20171113055854) do
+
+  create_table "amount_regexes", force: :cascade do |t|
+    t.integer "organization_id"
+    t.string  "regex"
+  end
+
+  add_index "amount_regexes", ["organization_id"], name: "index_amount_regexes_on_organization_id"
 
   create_table "donations", force: :cascade do |t|
     t.float    "amount"
@@ -19,22 +26,29 @@ ActiveRecord::Schema.define(version: 20170325154912) do
     t.boolean  "recurring"
     t.boolean  "matching"
     t.integer  "User_id"
-    t.integer  "NonProfit_id"
+    t.integer  "Organization_id"
     t.integer  "Processor_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.string   "non_profit_string"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "organization_string"
     t.boolean  "deductible"
   end
 
-  add_index "donations", ["NonProfit_id"], name: "index_donations_on_NonProfit_id"
+  add_index "donations", ["Organization_id"], name: "index_donations_on_Organization_id"
   add_index "donations", ["Processor_id"], name: "index_donations_on_Processor_id"
   add_index "donations", ["User_id"], name: "index_donations_on_User_id"
 
-  create_table "non_profits", force: :cascade do |t|
+  create_table "org_regexes", force: :cascade do |t|
+    t.integer "organization_id"
+    t.string  "regex"
+  end
+
+  add_index "org_regexes", ["organization_id"], name: "index_org_regexes_on_organization_id"
+
+  create_table "organizations", force: :cascade do |t|
     t.integer  "ein"
     t.string   "name"
-    t.string   "alias",             default: "ActiveRecord::Schema"
+    t.string   "alias",                 default: "ActiveRecord::Schema"
     t.string   "address"
     t.string   "city"
     t.string   "state"
@@ -43,27 +57,21 @@ ActiveRecord::Schema.define(version: 20170325154912) do
     t.integer  "classification"
     t.datetime "ruling_date"
     t.integer  "exemption_code"
-    t.string   "domain_name"
+    t.string   "homepage"
     t.integer  "foundation_code"
     t.string   "donation_page_url"
     t.string   "image"
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.string   "amount_regex"
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.string   "country"
+    t.string   "domain_name"
+    t.string   "blah"
+    t.string   "type"
+    t.string   "check_donation_string"
+    t.string   "org_regex"
   end
 
-  add_index "non_profits", ["alias"], name: "index_non_profits_on_alias"
-  add_index "non_profits", ["ein"], name: "index_non_profits_on_ein", unique: true
-
-
-  create_table "processors", force: :cascade do |t|
-    t.string   "name"
-    t.string   "domain"
-    t.string   "regex"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+  add_index "organizations", ["alias"], name: "index_organizations_on_alias"
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
@@ -75,7 +83,6 @@ ActiveRecord::Schema.define(version: 20170325154912) do
     t.boolean  "admin"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["password_reset_token"], name: "index_users_on_password_reset_token"
 
 end

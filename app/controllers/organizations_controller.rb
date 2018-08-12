@@ -1,5 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :check_regexes, only: [:create, :update]
   before_action :check_admin
 
   # GET /non_profits
@@ -19,11 +20,27 @@ class OrganizationsController < ApplicationController
 
   # GET /non_profits/new
   def new
-    @organization = Organization.new
+    regex = AmountRegex.new
+    amount_regexes = Array.new
+    amount_regexes.push regex
+    org_regex = OrgRegex.new
+    org_regexes = Array.new
+    org_regexes.push org_regexes
+    @organization = Organization.new(amount_regexes: amount_regexes, org_regexes: org_regexes)
   end
 
   # GET /non_profits/1/edit
   def edit
+    amount_regexes = @organization.amount_regexes
+    regex = AmountRegex.new
+    amount_regexes.push regex
+    @organization.amount_regexes = amount_regexes
+    
+    org_regexes = @organization.org_regexes
+    org_regex = OrgRegex.new
+    org_regexes.push org_regex
+    @organization.org_regexes = org_regexes
+
   end
 
   # POST /non_profits
@@ -79,8 +96,30 @@ class OrganizationsController < ApplicationController
       end
     end
 
+    def check_regexes
+      amount_regexes = Array.new
+      for regex in @organization.amount_regexes
+        if !regex.id.nil? || !regex.regex.empty?
+          amount_regexes.push regex
+        end
+      end
+      @organization.amount_regexes = amount_regexes
+      
+      org_regexes = Array.new
+      for regex in @organization.org_regexes
+        Rails.logger.info("REGEX ID OF #{regex.id} AND REGEX OF #{regex.regex} AND EMPTY OF #{regex.regex}")
+        if regex.regex.nil?
+          regex.destroy
+        else
+          org_regexes.push regex
+        end
+      end
+      Rails.logger.info("ORG REGEXES SIZE OF #{org_regexes.length}")
+      @organization.org_regexes = org_regexes
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
-      params.require(:organization).permit(:ein, :name, :alias, :tax_exempt, :domain_name, :amount_regex, :status_code, :donation_page_url, :image, :remove_image, :homepage, :type, :check_donation_string, :org_regex)
+      params.require(:organization).permit(:ein, :name, :alias, :tax_exempt, :domain_name, :status_code, :donation_page_url, :image, :remove_image, :homepage, :type, :check_donation_string, :org_regex, amount_regexes_attributes: [:id, :regex], org_regexes_attributes: [:id, :regex])
     end
 end

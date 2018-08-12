@@ -89,13 +89,15 @@
     <%= f.label :check_donation_string %><br>
     <%= f.text_field :check_donation_string %>
   </div>
-  <div class="field">
-    <%= f.label :org_regex %><br>
-    <%= f.text_field :org_regex %>
-  </div>
+  <%= f.fields_for :org_regexes, @organization.org_regexes do |p| %>
+    <div class="field">
+      <%= p.label :regex, 'Org Regex' %><br>
+      <%= p.text_field :regex %>
+    </div>
+  <% end %>
   <%= f.fields_for :amount_regexes, @organization.amount_regexes do |p| %>
     <div class="field">
-      <%= p.label :regex %><br>
+      <%= p.label :regex, 'Amount Regex' %><br>
       <%= p.text_field :regex %>
     </div>
   <% end %>

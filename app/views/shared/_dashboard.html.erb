@@ -19,7 +19,12 @@
       </div>
   </div>
 
-  <h1 class="page-header">Recent Giving</h1>
+  <% if preview %>
+    <h1 class="page-header">Example Giving Gallery</h1>
+  <% else %>
+    <h1 class="page-header">Recent Giving</h1>
+  <% end %>
+
 
   <div class="card-deck clearfix">
     <% @donations.each do |donation| %>
@@ -40,6 +45,9 @@
             <%= donation.organization_string %>
           </h4>
           <div class="donation-data">
+            <% if preview %>
+              <p class="example">Example</p>
+            <% end %>
             <p class="card-text amount"><%= number_to_currency(donation.amount) %></p>
             <p class="card-text date"><%= donation.donation_date.strftime('%_m/%-d/%Y') %></p>
             <%= link_to 'Edit', edit_donation_path(donation.id), class: 'card-link' %></td>
